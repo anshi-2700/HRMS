@@ -1,0 +1,95 @@
+{% extends "job_portal/base.html" %}
+
+{% block og_title %}About Nexus Workforce OS — Enterprise Human Capital Platform{% endblock %}
+{% block og_description %}Nexus Workforce OS is an enterprise HCM platform engineered for multi-entity payroll, biometric attendance, talent acquisition, and organizational lifecycle governance.{% endblock %}
+{% block og_url %}https://nexushr.io/about{% endblock %}
+{% block title %}About Nexus Workforce OS — Enterprise Human Capital Platform{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container-xxl py-5 bg-dark page-header mb-5 text-white">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">About Nexus Workforce OS</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb text-uppercase">
+                <li class="breadcrumb-item"><a href="{% url 'main:job_portal' %}" class="text-white-50">Home</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">About</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div id="about" class="container-xxl py-5 bg-light">
+    <div class="container">
+        <div class="row g-5 align-items-center mb-5">
+            <div class="col-lg-12 text-center">
+                <span class="badge bg-primary px-3 py-2 text-uppercase mb-3">Enterprise Workforce OS</span>
+                <h1 class="mb-4 text-primary fw-bold">Enterprise-Grade Human Capital Management</h1>
+                <p class="lead text-muted mb-4 col-lg-10 mx-auto">
+                    <strong>Nexus Workforce OS</strong> is an enterprise Human Capital Management and workforce intelligence platform 
+                    developed by <strong>Nexus Global Technologies Inc.</strong> Engineered for organizations that demand precision, 
+                    security, and scalability across global operations.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'user:user_login' %}" class="btn btn-primary btn-lg px-4">
+                        <i class="fa fa-sign-in-alt me-2"></i>Access Portal
+                    </a>
+                    <a href="/api/docs" class="btn btn-outline-primary btn-lg px-4" target="_blank">
+                        <i class="fa fa-code me-2"></i>OpenAPI Specs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="p-4 bg-white shadow-sm rounded-3 h-100 border-top border-primary border-3">
+                    <h4 class="mb-3 text-primary"><i class="fa fa-layer-group me-2"></i>Unified Architecture</h4>
+                    <p class="text-muted small mb-0">
+                        Combines employee records, real-time biometric time-clocking, multi-level leave approvals, fixed-point payroll, and candidate recruitment into a single pane of glass.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white shadow-sm rounded-3 h-100 border-top border-primary border-3">
+                    <h4 class="mb-3 text-primary"><i class="fa fa-lock me-2"></i>Enterprise Security</h4>
+                    <p class="text-muted small mb-0">
+                        Rigorous role-based access control (RBAC), encrypted credential handling, session integrity, and comprehensive audit logs designed to meet corporate compliance standards.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white shadow-sm rounded-3 h-100 border-top border-primary border-3">
+                    <h4 class="mb-3 text-primary"><i class="fa fa-bolt me-2"></i>Decoupled REST API</h4>
+                    <p class="text-muted small mb-0">
+                        Built on Django Ninja and Python 3.11 with typed schemas, asynchronous workers (Celery + Redis), and a modern React 19 single-page application.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-12">
+                <div class="p-4 bg-white shadow-sm rounded-3 border">
+                    <h4 class="mb-3 text-primary fw-bold">Global Headquarters &amp; Operations</h4>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-2"><strong>Nexus Global Technologies Inc.</strong></p>
+                            <p class="text-muted mb-2">One World Trade Center, Suite 8500<br>New York, NY 10007, United States</p>
+                            <p class="text-muted mb-0">Web: <a href="https://nexushr.io" class="text-primary">https://nexushr.io</a></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-2"><strong>Enterprise Support &amp; Inquiries:</strong></p>
+                            <p class="text-muted mb-2"><i class="fa fa-envelope text-primary me-2"></i><a href="mailto:contact@nexushr.io">contact@nexushr.io</a></p>
+                            <p class="text-muted mb-0"><i class="fa fa-envelope text-primary me-2"></i><a href="mailto:hr@nexushr.io">hr@nexushr.io</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

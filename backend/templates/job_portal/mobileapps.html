@@ -1,0 +1,175 @@
+{% extends "job_portal/base.html" %}
+
+{% block og_title %}Nexus: Mobile App Development Solutions{% endblock %}
+{% block og_description %}Nexus offers expert mobile app development services with a decade of experience in delivering high-performance Android applications tailored to meet your specific needs. Based in New York, USA, we specialize in creating robust, scalable apps that stand out in today’s competitive market.{% endblock %}
+{% block og_url %}https://Nexus.com/{% endblock %}
+{% block title %}Nexus: Mobile App Development Solutions{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Header Start -->
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Mobile App Development Projects</h1>
+    </div>
+</div>
+<!-- Header End -->
+
+<section id="custom-app-development" class="custom-app-development bg-light" style="margin-bottom:3%; margin-top:3%;">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h1>Mobile App Development Projects</h1>
+            <p class="separator">Nexus offers expert mobile app development services with a decade of experience in delivering high-performance Android applications tailored to meet your specific needs. Based in New York, USA, we specialize in creating robust, scalable apps that stand out in today’s competitive market.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 another-section bg-secondary text-white p-4">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/portfolio5.jpg' %}" class="img-responsive project-img" alt="Payment Gateway Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Payment Gateway Project</h4>
+                                <p>Developed for Red Dot Payment Singapore clients, this Android app is designed to simulate and test payment acceptance workflows. The app allows users to send access tokens and process various payment scenarios, ensuring the secure and efficient handling of transactions. It serves as a critical tool for testing and validating payment gateway integrations before going live.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/portfolio4.jpg' %}" class="img-responsive project-img" alt="Pocket Parade Game Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Pocket Parade Game Project</h4>
+                                <p>Created for RedRhino Games USA, Pocket Parade is an immersive mobile game app that draws inspiration from classic strategy games like Age of Empires. Players can create their own game worlds, build empires, and engage in strategic battles. The app was a trending hit, captivating users with its intricate gameplay, world-building features, and competitive warfare. It showcases Nexus’s ability to deliver high-quality gaming experiences on mobile platforms.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/portfolio2.jpg' %}" class="img-responsive project-img" alt="Ticket Generator Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Ticket Generator Project</h4>
+                                <p>Developed for Gtechna, Montreal, Canada, this Android app is a demo app used by Canadian traffic enforcement agencies. The app features two main screens: Ticket Creation and Ticket Management, allowing officers to create and manage traffic violation records efficiently. Compatible with Android versions 2.2 to 4.2, it enhances law enforcement efficiency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Request Project Support Section -->
+<div id="index" class="container-fluid bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 15px;">
+    <div class="container">
+        <div class="row g-2">
+            <h3 style="text-align:center; color:white;">Request Project Support</h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="container text-center">
+    <div id="project-form" style="margin-top: 20px;">
+        <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-8 col-md-10">
+                <div class="form" style="background-color: #f8f9fa; border-radius: 10px; padding: 30px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <form id="submit-form" action="#" class="php-email-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Full Name" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="project_name" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="project_description" class="form-label">Project Description</label>
+                            <textarea class="form-control" name="project_description" rows="4" id="project_description" placeholder="Brief description of your project" required></textarea>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="preferred_location" class="form-label">Preferred Location</label>
+                            <input type="text" class="form-control" name="preferred_location" id="preferred_location" placeholder="City, Country">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="budget" class="form-label">Project Budget (Optional)</label>
+                            <input type="text" class="form-control" name="budget" id="budget" placeholder="Estimated Project Budget">
+                        </div>
+
+                        <div class="my-3 text-center">
+                            <button type="submit" class="btn btn-primary">Submit Project Details</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/app.js' %}"></script>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById("password");
+        var passwordIcon = document.getElementById("password-icon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            passwordIcon.classList.remove("fa-eye-slash");
+            passwordIcon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            passwordIcon.classList.remove("fa-eye");
+            passwordIcon.classList.add("fa-eye-slash");
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{%static 'assets/js/jquery-3.7.1.min.js'%}"></script>
+
+<script>
+    $("#submit-form").submit((e) => {
+        e.preventDefault();
+		const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbyxzRzjygEh1l0AHrTD6uEXKGilEkmYjCeC0YGk1wABLOureKv6sv1aah09itDpLgL6GQ/exec",
+            data: $("#submit-form").serialize() + '&csrfmiddlewaretoken=' + csrfToken,
+            method: "POST",
+            success: function (response) {
+                // Use SweetAlert for success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Your Message is sent to Nexus Global Technologies Inc..',
+                }).then(() => {
+                    window.location.reload();
+                });
+            },
+            error: function (err) {
+                // Use SweetAlert for error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Something went wrong.',
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

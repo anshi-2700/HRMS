@@ -1,0 +1,292 @@
+{% extends "base/base_settings.html" %}
+{%load static%}
+
+{% block content %}
+<div class="col-md-8 ">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3 class="page-title">Company Settings</h3>
+			</div>
+		</div>
+	</div>
+	<!-- /Page Header -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<table class="table table-striped custom-table mb-0 datatable">
+					<thead>
+						<tr>
+							<th class="width-thirty">#</th>
+							<th>Name </th>
+							<th>Logo </th>
+							<th>Contact Person </th>							
+							<th>Country </th>							
+							<th>Email </th>							
+							<th>Phone </th>							
+							<th>Website </th>
+							<th class="text-end">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for company in companies %}
+						<tr>
+							<td>{{forloop.counter}}</td>
+							<td>{{ company.name }}</td>
+							{% if company.logo %}
+							<td><img src="{{ company.logo.url }}" alt="{{ company.name }} Logo"></td>
+							{% endif %}
+							<td>{{ company.contact_person }}</td>
+							<td>{{ company.country }}</td>
+							<td>{{ company.email }}</td>
+							<td>{{ company.phone }}</td>
+							<td>{{ company.website }}</td>
+							<td class="text-end">
+								<div class="dropdown dropdown-action">
+									<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="dropdown-item" href="{% url 'main:edit_company' pk=company.id %}"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>
+								</div>
+								</div>
+							</td>
+						</tr>
+						<!-- Edit company Modal -->
+						<div id="edit_company_{{ company.id }}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Edit company</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form id="update_form_{{ company.id }}" method="POST" action="{% url 'main:edit_company' pk=company.id %}" enctype="multipart/form-data">
+											{% csrf_token %}
+											<div class="input-block mb-3">
+												<label class="col-form-label">Name <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="name"  value="{{company.name}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Contact Person <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="contact_person"  value="{{company.contact_person}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Address<span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="address"  value="{{company.address}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Country<span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="country"  value="{{company.country}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">State <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="state"  value="{{company.state}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">City <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="city"  value="{{company.city}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Postal Code <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="postal_code"  value="{{company.postal_code}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Email<span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="email"  value="{{company.email}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Phone <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="phone"  value="{{company.phone}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Mobile <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="mobile"  value="{{company.mobile}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Fax <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="fax"  value="{{company.fax}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Website <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="website"  value="{{company.website}}">
+											</div>
+											<div class="submit-section">
+												<button class="btn btn-primary submit-btn" onclick="submitUpdateForm(event, '{{company.id}}')">Save</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Edit company Modal -->
+
+						<!-- Delete company Modal -->
+						<div class="modal custom-modal fade" id="delete_company_{{ company.id }}" role="dialog">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="form-header">
+											<h3>Delete company</h3>
+											<p>Are you sure want to delete?</p>
+										</div>
+										<div class="modal-btn delete-action">
+											<div class="row">
+												<div class="col-6">
+													{% comment %} <a href="{% url 'main:delete_company' pk=company.id %}" class="btn btn-primary continue-btn">Delete</a> {% endcomment %}
+												</div>
+												<div class="col-6">
+													<a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Delete company Modal -->
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Page Content -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+	function submitUpdateForm(event,Id) {
+		event.preventDefault();  // Prevent the default form submission behavior
+		var form = document.getElementById('update_form_' + Id);
+		var formData = new FormData(form);
+
+		fetch(form.action, {
+			method: 'POST',
+			body: formData,
+		})
+		.then(response => response.json())
+		.then(data => {
+			// Corrected variable name here
+			if (data.status === 'true') {
+			showSweetAlert(data.message, data.status, data.redirect_url);
+			} else if (data.status === 'form_error') {
+			showSweetAlert(data.message, 'form_error');
+			} else if (data.status === 'false') {
+			showSweetAlert(data.message, data.status);
+			} else {
+			showSweetAlert(data.message, 'error');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+		}
+
+		function showSweetAlert(message, status, redirectUrl) {
+		if (status === 'true') {
+			Swal.fire({
+			icon: 'success',
+			title: 'Success!',
+			text: message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+
+			didClose: () => {
+				if (redirectUrl) {
+				// Combine the redirect URL with the current protocol and host to get the full URL
+				var fullRedirectUrl = window.location.origin + redirectUrl;
+				window.location.href = fullRedirectUrl;
+				}
+			}
+			});
+		} else if (status === 'form_error') {
+			Swal.fire({
+			icon: 'error',
+			title: 'Form Validation Error!',
+			html: message,  // Display form errors as HTML
+			showConfirmButton: true,
+			allowOutsideClick: false,
+			});
+		} else if (status === 'false') {
+			Swal.fire({
+			icon: 'error',
+			title: 'Form Error!',
+			text: 'Error: ' + message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+			});
+		} else {
+			Swal.fire({
+			icon: 'error',
+			title: 'Error!',
+			text: 'Error: ' + message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+			});
+		}
+		}
+
+	// Function to handle delete action
+	function handleDelete(pk) {
+		Swal.fire({
+			title: "Are you sure?",
+			text: "Once deleted, you will not be able to recover this HRMS Client!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!"
+		})
+		.then((result) => {
+			if (result.isConfirmed) {
+				// If user confirms, send Fetch API request to delete
+				fetch('{% url "hrms:delete_hrms_client" pk=0 %}'.replace('0', pk), {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': '{{ csrf_token }}'
+					},
+				})
+				.then(response => response.json())
+				.then(data => {
+					// Handle success response
+					if (data.status === "true") {
+						Swal.fire({
+							title: data.title,
+							text: data.message,
+							icon: "success",
+						})
+						.then((value) => {
+							// Redirect to the specified URL after success
+							window.location.href = data.redirect_url;
+						});
+					} else {
+						Swal.fire("Error", "An error occurred while deleting.", "error");
+					}
+				})
+				.catch(() => {
+					// Handle error
+					Swal.fire("Error", "An error occurred while processing the request.", "error");
+				});
+			} else {
+				Swal.fire("HRMS Client is safe!");
+			}
+		});
+	}
+
+	// Attach click event to delete button
+	document.querySelectorAll('.remove').forEach(function(el) {
+		el.addEventListener('click', function(e) {
+			e.preventDefault();
+			var pk = this.getAttribute('data-id');
+			handleDelete(pk);
+		});
+	});
+
+</script>
+
+
+{% endblock %}

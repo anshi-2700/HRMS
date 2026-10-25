@@ -1,0 +1,23 @@
+# Ignore Python bytecode
+*.pyc
+__pycache__/
+*/__pycache__/
+*/migrations/__pycache__/
+
+# Ignore database files
+db.sqlite3
+
+# Ignore virtual environments
+venv/
+
+# Ignore uploaded media files
+media/
+
+# Ignore specific file
+notes.txt
+staticfiles/
+frontend/node_modules/
+frontend/dist/
+backend/backup/
+*.log
+.env

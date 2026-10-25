@@ -1,0 +1,350 @@
+{% extends "base/base_settings.html" %}
+{%load static%}
+
+{% block content %}
+<div class="col-md-8 offset-md-2">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3 class="page-title">Salary Settings</h3>
+			</div>
+		</div>
+		<div class="col-auto float-end ms-auto">
+			<a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary_setting"><i class="fa-solid fa-plus"></i> Add Salary Settings</a>
+		</div>
+	</div>
+	<!-- /Page Header -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div>
+				<table class="table table-striped custom-table mb-0 datatable">
+					<thead>
+						<tr>
+							<th class="width-thirty">#</th>
+							<th>DA </th>
+							<th>HRA </th>							
+							<th>PF EMP </th>							
+							<th>PF ORG </th>							
+							<th>ESI EMP </th>							
+							<th>ESI ORG </th>							
+							<th>TDS </th>
+							<th class="text-end">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for salary_setting in salary_settings %}
+						<tr>
+							<td>{{forloop.counter}}</td>
+							<td>{{ salary_setting.da }}</td>
+							<td>{{ salary_setting.hra }}</td>
+							<td>{{ salary_setting.pf_emp }}</td>
+							<td>{{ salary_setting.pf_org }}</td>
+							<td>{{ salary_setting.esi_emp }}</td>
+							<td>{{ salary_setting.tds }}</td>
+							<td class="text-end">
+								<div class="dropdown dropdown-action">
+									<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_salary_setting_{{ salary_setting.id }}"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>
+										<a class="dropdown-item remove" data-id="{{ salary_setting.id }}" href="#" data-bs-toggle="modal" data-bs-target="#delete_salary_setting_{{ salary_setting.id }}"><i class="fa-regular fa-trash-can m-r-5"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<!-- Edit salary_setting Modal -->
+						<div id="edit_salary_setting_{{ salary_setting.id }}" class="modal custom-modal fade" role="dialog">
+							<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Edit salary_setting</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form id="update_form_{{ salary_setting.id }}" method="POST" action="{% url 'payroll:edit_salary_setting' pk=salary_setting.id %}" enctype="multipart/form-data">
+											{% csrf_token %}
+											<div class="input-block mb-3">
+												<label class="col-form-label">DA (%) <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="da"  value="{{salary_setting.da}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">HRA (%) <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="hra"  value="{{salary_setting.hra}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Providen Fund Employee Share (%)<span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="pf_emp"  value="{{salary_setting.pf_emp}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">Provident Fund Organization Share (%)<span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="pf_org"  value="{{salary_setting.pf_org}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">ESI Employee Share (%) <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="esi_emp"  value="{{salary_setting.esi_emp}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">ESI Organization Share (%) <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="esi_org"  value="{{salary_setting.esi_org}}">
+											</div>
+											<div class="input-block mb-3">
+												<label class="col-form-label">TDS <span class="text-danger">*</span></label>
+												<input class="form-control" type="text" name="tds"  value="{{salary_setting.tds}}">
+											</div>
+											<div class="submit-section">
+												<button class="btn btn-primary submit-btn" onclick="submitUpdateForm(event, '{{salary_setting.id}}')">Save</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Edit salary_setting Modal -->
+
+						<!-- Delete salary_setting Modal -->
+						<div class="modal custom-modal fade" id="delete_salary_setting_{{ salary_setting.id }}" role="dialog">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="form-header">
+											<h3>Delete salary_setting</h3>
+											<p>Are you sure want to delete?</p>
+										</div>
+										<div class="modal-btn delete-action">
+											<div class="row">
+												<div class="col-6">
+													<a href="{% url 'payroll:delete_salary_setting' pk=salary_setting.id %}" class="btn btn-primary continue-btn">Delete</a>
+												</div>
+												<div class="col-6">
+													<a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Delete salary_setting Modal -->
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Page Content -->
+<!-- Add Salary Setting Modal -->
+<div id="add_salary_setting" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Salary Setting</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="create_form" method="POST" action="{% url 'employee:create_leave_type' %}" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="input-block mb-3">
+						<label class="col-form-label">DA (%) <span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="da">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">HRA (%) <span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="hra">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">Providen Fund Employee Share (%)<span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="pf_emp">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">Provident Fund Organization Share (%)<span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="pf_org">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">ESI Employee Share (%) <span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="esi_emp">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">ESI Organization Share (%) <span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="esi_org">
+					</div>
+					<div class="input-block mb-3">
+						<label class="col-form-label">TDS <span class="text-danger">*</span></label>
+						<input class="form-control" type="text" name="tds">
+					</div>
+
+					<div class="submit-section">
+						<button class="btn btn-primary submit-btn" onclick="submitCreateForm(event)">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Add Salary Setting Modal -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+	function submitCreateForm(event) {
+		event.preventDefault();  // Prevent the default form submission behavior
+		var form = document.getElementById('create_form');
+		var formData = new FormData(form);
+		
+		fetch(form.action, {
+			method: 'POST',
+			body: formData,
+		})
+		.then(response => response.json())
+		.then(data => {
+			// Corrected variable name here
+			if (data.status === 'true') {
+			} else if (data.status === 'form_error') {
+			showSweetAlert(data.message, 'form_error');
+			} else if (data.status === 'false') {
+			showSweetAlert(data.message, data.status);
+			} else {
+			showSweetAlert(data.message, 'error');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+		}
+		
+		function showSweetAlert(message, status, redirectUrl) {
+		if (status === 'true') {
+			Swal.fire({
+			icon: 'success',
+			title: 'Success!',
+			text: message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+		
+			didClose: () => {
+				if (redirectUrl) {
+				// Combine the redirect URL with the current protocol and host to get the full URL
+				var fullRedirectUrl = window.location.origin + redirectUrl;
+				window.location.href = fullRedirectUrl;
+				}
+			}
+			});
+		} else if (status === 'form_error') {
+			Swal.fire({
+			icon: 'error',
+			title: 'Form Validation Error!',
+			html: message,  // Display form errors as HTML
+			showConfirmButton: true,
+			allowOutsideClick: false,
+			});
+		} else if (status === 'false') {
+			Swal.fire({
+			icon: 'error',
+			title: 'Form Error!',
+			text: 'Error: ' + message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+			});
+		} else {
+			Swal.fire({
+			icon: 'error',
+			title: 'Error!',
+			text: 'Error: ' + message,
+			showConfirmButton: true,
+			allowOutsideClick: false, // Prevent closing on outside click
+			});
+		}
+	}
+		
+	function submitUpdateForm(event,Id) {
+		event.preventDefault();  // Prevent the default form submission behavior
+		var form = document.getElementById('update_form_' + Id);
+		var formData = new FormData(form);
+
+		fetch(form.action, {
+			method: 'POST',
+			body: formData,
+		})
+		.then(response => response.json())
+		.then(data => {
+			// Corrected variable name here
+			if (data.status === 'true') {
+			showSweetAlert(data.message, data.status, data.redirect_url);
+			} else if (data.status === 'form_error') {
+			showSweetAlert(data.message, 'form_error');
+			} else if (data.status === 'false') {
+			showSweetAlert(data.message, data.status);
+			} else {
+			showSweetAlert(data.message, 'error');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+		}
+
+	// Function to handle delete action
+	function handleDelete(pk) {
+		Swal.fire({
+			title: "Are you sure?",
+			text: "Once deleted, you will not be able to recover this HRMS Client!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!"
+		})
+		.then((result) => {
+			if (result.isConfirmed) {
+				// If user confirms, send Fetch API request to delete
+				fetch('{% url "hrms:delete_hrms_client" pk=0 %}'.replace('0', pk), {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': '{{ csrf_token }}'
+					},
+				})
+				.then(response => response.json())
+				.then(data => {
+					// Handle success response
+					if (data.status === "true") {
+						Swal.fire({
+							title: data.title,
+							text: data.message,
+							icon: "success",
+						})
+						.then((value) => {
+							// Redirect to the specified URL after success
+							window.location.href = data.redirect_url;
+						});
+					} else {
+						Swal.fire("Error", "An error occurred while deleting.", "error");
+					}
+				})
+				.catch(() => {
+					// Handle error
+					Swal.fire("Error", "An error occurred while processing the request.", "error");
+				});
+			} else {
+				Swal.fire("HRMS Client is safe!");
+			}
+		});
+	}
+
+	// Attach click event to delete button
+	document.querySelectorAll('.remove').forEach(function(el) {
+		el.addEventListener('click', function(e) {
+			e.preventDefault();
+			var pk = this.getAttribute('data-id');
+			handleDelete(pk);
+		});
+	});
+
+</script>
+
+
+{% endblock %}

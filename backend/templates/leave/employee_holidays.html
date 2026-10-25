@@ -1,0 +1,77 @@
+{% extends "base/base_employee.html" %}
+{% load static%}
+
+{% block content %}
+		
+<!-- Page Content -->
+<div class="content container-fluid">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row align-items-center">
+			<div class="col">
+				<h3 class="page-title">Holidays </h3>
+				<ul class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'main:hrms_dashboard' %}">Dashboard</a></li>
+					<li class="breadcrumb-item active">Holidays</li>
+				</ul>
+			</div>			
+		</div>
+	</div>
+	<!-- /Page Header -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-striped custom-table mb-0">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Title </th>
+							<th>Holiday Date</th>
+							<th>Day</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for holiday in holidays %}
+						<tr class="holiday-upcoming">
+							<td>{{forloop.counter}}</td>
+							<td>{{ holiday.name }}</td>
+							<td>{{ holiday.date|date:"j M Y" }}</td>
+							<td>{{ holiday.date|date:"l" }}</td>							
+						</tr>
+						{% endfor %}
+						{% for admin_holiday in admin_holidays %}
+						<tr class="holiday-upcoming">
+							<td>{{forloop.counter}}</td>
+							<td>{{ admin_holiday.name }}</td>
+							<td>{{ admin_holiday.date|date:"j M Y" }}</td>
+							<td>{{ admin_holiday.date|date:"l" }}</td>							
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Page Content -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Add JavaScript code to handle form submission and show SweetAlert messages -->
+<!-- jQuery -->
+<script src="{%static 'assets/js/jquery-3.7.1.min.js'%}"></script>
+		
+<script>
+	$(document).ready(function(){
+        $('.datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD', // Date-only format
+            // Additional configurations to ensure time is not included
+            ignoreReadonly: true,
+            allowInputToggle: true
+        });
+    });
+</script>
+
+
+{% endblock %}

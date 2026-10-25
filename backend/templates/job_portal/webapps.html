@@ -1,0 +1,221 @@
+{% extends "job_portal/base.html" %}
+
+{% block og_title %}Nexus: Full-Stack Web Application Development Expertise{% endblock %}
+{% block og_description %}Nexus specializes in full-stack web application development, offering high-performance solutions tailored to your business needs. Based in New York, USA, we create robust, scalable web applications with a focus on user experience and modern technologies.{% endblock %}
+{% block og_url %}https://Nexus.com/{% endblock %}
+{% block title %}Nexus: Full-Stack Web Application Development Expertise{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Header Start -->
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Full-Stack Portfolio Projects</h1>
+    </div>
+</div>
+<!-- Header End -->
+
+<section id="full-stack-development" class="full-stack-development bg-light" style="margin-bottom:3%; margin-top:3%;">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h1>Full-Stack Web Application Projects</h1>
+            <p class="separator">At Nexus, we specialize in both front-end and back-end development, delivering cutting-edge solutions tailored to your business needs. With a skilled team and deep expertise in modern technologies, we are committed to transforming your project ideas into robust, high-performance applications that drive success and stand out in the market.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 another-section bg-secondary text-white p-4">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/zoho_openai.png' %}" class="img-responsive project-img" alt="Zoho Recruit Python OpenAI project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Zoho Recruit Python OpenAI project</h4>
+                                <p>Developed an advanced integration between Zoho Recruit and OpenAI using Python, enabling automated recruitment processes. Implemented AI-powered responses to streamline candidate interactions, such as automated email generation, candidate screening, and scheduling interviews. Leveraged RESTful APIs to connect Zoho Recruit with OpenAI, enhancing the platform's capabilities to predict candidate suitability based on predefined criteria. Utilized Python's data processing libraries to analyze and categorize candidate profiles efficiently.</p>
+                                <p>Skills Used: Python, RESTful APIs, OpenAI integration, Data Processing</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/spree_scrapper.png' %}" class="img-responsive project-img" alt="Spree Ecommerce Ruby on Rails Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Spree Ecommerce Ruby on Rails Project</h4>
+                                <p>Led the development of a comprehensive scraping solution for e-commerce sites using OpenAI prompts. Designed a Ruby on Rails application to automate the extraction and duplication of store data, including product descriptions, prices, and images. Integrated features to dynamically generate store pages based on the scraped data, enhancing SEO and user engagement. Utilized background processing with Sidekiq to handle large volumes of data, ensuring the application remained responsive and scalable.</p>
+                                <p>Skills Used: Ruby on Rails, OpenAI integration, Web Scraping, Sidekiq, SEO Optimization</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/angular_restaurant.png' %}" class="img-responsive project-img" alt="Angular Restaurant Analytic Dashboard Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Angular Restaurant Analytic Dashboard Project</h4>
+                                <p>Designed and developed a responsive Angular-based dashboard for restaurant analytics. The application provided real-time data visualization for key metrics such as sales performance, customer preferences, and inventory levels. Implemented a modular architecture to allow for easy integration of new features and data sources. Integrated third-party APIs for real-time reporting and created custom data filters for detailed business insights. The dashboard was optimized for both desktop and mobile devices, ensuring accessibility and usability.</p>
+                                <p>Skills Used: Angular, Data Visualization, API Integration, Responsive Design</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/angular_analytic.png' %}" class="img-responsive project-img" alt="Angular Temperature Data Monitoring Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Angular Temperature Data Monitoring Project</h4>
+                                <p>Engineered an Angular application to monitor and display temperature data in real-time, providing critical insights for industries such as agriculture, manufacturing, and logistics. Developed custom charting components to visualize temperature trends over time, including alerts for threshold breaches. Integrated with IoT sensors to fetch live data, ensuring high accuracy and responsiveness. Focused on creating a user-friendly interface with customizable dashboards that allowed users to monitor specific regions or assets.</p>
+                                <p>Skills Used: Angular, IoT Integration, Real-time Data Processing, Custom Charting Components</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/codeignitor_pay.png' %}" class="img-responsive project-img" alt="Reddotpay CodeIgniter CRM Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Reddotpay CodeIgniter CRM Project</h4>
+                                <p>Developed robust CRM-based payment pages within the CodeIgniter framework to enhance the checkout experience for users. Implemented secure transaction handling using industry-standard encryption protocols and integrated with multiple payment gateways, including PayPal and Stripe. Enhanced the CRM system with customer segmentation and reporting features, allowing businesses to track payment histories and customer interactions. Focused on optimizing the performance and security of the payment process, ensuring compliance with regulatory standards.</p>
+                                <p>Skills Used: CodeIgniter, Payment Gateway Integration, Security Protocols, CRM Development</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/prop_app.png' %}" class="img-responsive project-img" alt="Laravel Vue.js Property Management Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Laravel Vue.js Property Management Project</h4>
+                                <p>Built a comprehensive property management application using Laravel and Vue.js, featuring an intuitive interface for managing property listings, tenant records, and maintenance requests. Developed a multi-user system with role-based access control, allowing property managers, tenants, and administrators to access relevant features. Integrated Google Maps API for geolocation services, enabling users to view properties on an interactive map. The application was optimized for scalability and performance, supporting large datasets and concurrent users.</p>
+                                <p>Skills Used: Laravel, Vue.js, Role-based Access Control, Google Maps API Integration, Scalability</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mt-3 mb-3">
+                        <div class="project-block bottom shadow rounded">
+                            <img src="{% static 'job_portal/img/portfolio/shipmnet_App.png' %}" class="img-responsive project-img" alt="Laravel Shipment Logistic Project">
+                            <div class="project-content p-3">
+                                <h4 class="mb-2">Laravel Shipment Logistic Project</h4>
+                                <p>Designed and implemented a shipment logistics system using Laravel, focusing on optimizing the logistics process from order placement to final delivery. Integrated third-party APIs for real-time shipment tracking and route optimization, reducing delivery times and costs. Developed features for automated invoicing, inventory management, and reporting, allowing businesses to track shipments, manage stock levels, and generate financial reports with ease. The system was built with a modular architecture, enabling easy expansion and integration with other services.</p>
+                                <p>Skills Used: Laravel, API Integration, Inventory Management, Modular Architecture, Logistics Optimization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Request Project Support Section -->
+<!-- Request Project Support Section -->
+<div id="index" class="container-fluid bg-primary mb-1 wow fadeIn" data-wow-delay="0.1s" style="padding: 15px;">
+    <div class="container">
+        <div class="row g-2">
+            <h3 style="text-align:center; color:white;">Request Project Support</h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="container text-center">
+    <div id="project-form" style="margin-top: 20px;">
+        <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-8 col-md-10">
+                <div class="form" style="background-color: #f8f9fa; border-radius: 10px; padding: 30px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <form id="submit-form" action="#" class="php-email-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Full Name" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="project_name" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" name="project_name" id="project_name" placeholder="Project Name" required>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="project_description" class="form-label">Project Description</label>
+                            <textarea class="form-control" name="project_description" rows="4" id="project_description" placeholder="Brief description of your project" required></textarea>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="preferred_location" class="form-label">Preferred Location</label>
+                            <input type="text" class="form-control" name="preferred_location" id="preferred_location" placeholder="City, Country">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="budget" class="form-label">Project Budget (Optional)</label>
+                            <input type="text" class="form-control" name="budget" id="budget" placeholder="Estimated Project Budget">
+                        </div>
+
+                        <div class="my-3 text-center">
+                            <button type="submit" class="btn btn-primary">Submit Project Details</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/app.js' %}"></script>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById("password");
+        var passwordIcon = document.getElementById("password-icon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            passwordIcon.classList.remove("fa-eye-slash");
+            passwordIcon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            passwordIcon.classList.remove("fa-eye");
+            passwordIcon.classList.add("fa-eye-slash");
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{%static 'assets/js/jquery-3.7.1.min.js'%}"></script>
+
+<script>
+    $("#submit-form").submit((e) => {
+        e.preventDefault();
+		const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbyxzRzjygEh1l0AHrTD6uEXKGilEkmYjCeC0YGk1wABLOureKv6sv1aah09itDpLgL6GQ/exec",
+            data: $("#submit-form").serialize() + '&csrfmiddlewaretoken=' + csrfToken,
+            method: 'POST',
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Your project details have been successfully submitted!'
+                });
+                $("#submit-form")[0].reset();
+            },
+            error: function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong! Please try again.'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

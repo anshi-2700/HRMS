@@ -1,0 +1,307 @@
+{% extends "base/base_hrms_admin.html" %}
+{%load static%}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header">
+	<div class="row">
+		<div class="col-sm-12">
+			<h3 class="page-title">Welcome {{ company_name }} !</h3>
+		</div>
+	</div>
+</div>
+<!-- /Page Header -->
+
+<div class="row">
+	
+	{% comment %} <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+		<a href="{% url 'client:clients' %}">
+			<div class="card dash-widget">
+				<div class="card-body">
+					<span class="dash-widget-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+					<div class="dash-widget-info">
+						<h3>{{clients_count}}</h3>
+						<span>Clients</span>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>	 {% endcomment %}
+	<div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+		<a href="{% url 'employee:employees' %}">
+			<div class="card dash-widget">
+				<div class="card-body">
+					<span class="dash-widget-icon"><i class="fa-solid fa-user"></i></span>
+					<div class="dash-widget-info">
+						<h3>{{employees_count}}</h3>
+						<span>Employees</span>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+		<a href="{% url 'job:jobs' %}">
+			<div class="card dash-widget">
+				<div class="card-body">
+					<span class="dash-widget-icon"><i class="fa fa-rocket" aria-hidden="true"></i></span>
+					<div class="dash-widget-info">
+						<h3>{{jobs_count}}</h3>
+						<span>Jobs</span>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+	<div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+		<a href="{% url 'candidate:hrms_candidates' %}">
+			<div class="card dash-widget">
+				<div class="card-body">
+					<span class="dash-widget-icon"><i class="fa fa-users" aria-hidden="true"></i></span>
+					<div class="dash-widget-info">
+						<h3>{{candidates_count}}</h3>
+						<span>Candidates</span>
+					</div>
+				</div>
+			</div>
+		</a>		
+	</div>
+	<div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+		<section>
+			<h5 class="dash-title">Upcoming Holiday</h5>
+			<div class="card">
+				<div class="card-body text-center">
+					{% if next_holiday %}
+						<h4 class="holiday-title mb-0">{{ next_holiday.date|date:"D d M Y" }} - {{ next_holiday.name }}</h4>
+					{% else %}
+						<p>No upcoming holiday</p>
+					{% endif %}
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+
+<!-- Statistics Widget - Candidate & Jobs-->
+<div class="row">	
+	<div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+		<div class="card card-table flex-fill">
+			<div class="card-header">
+				<h3 class="card-title mb-0">Jobs</h3>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					{% if jobs %}
+						<table class="table custom-table mb-0">
+							<thead>
+								<tr>
+									<th>Job Title</th>
+									<th>No. of vacancies</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for job in jobs %}
+								<tr>
+									<td>
+										<h2 class="table-avatar">
+											{% comment %} <a href="#" class="avatar"><img src="{% static 'assets/img/profiles/avatar-19.jpg' %}" alt="User Image"></a> {% endcomment %}
+											<a href="{% url 'job:jobs' %}">{{ job.job_title }} </a>
+										</h2>
+									</td>
+									<td>{{ job.no_of_vacancies }}</td>
+									<td>{{ job.status }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+					<div class="no-jobs-message" style="display: flex;justify-content: center;">
+						<a href="{% url 'job:jobs' %}"><h4>No jobs posted yet. Post a job</h4></a>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="card-footer">
+				<a href="{% url 'job:jobs' %}">View all jobs</a>
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+		<div class="card card-table flex-fill">
+			<div class="card-header">
+				<h3 class="card-title mb-0">Candidates</h3>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table custom-table mb-0">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Skills</th>
+								<th>Experience</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for candidate in candidates %}
+							<tr>
+								<td>
+									<h2 class="table-avatar">
+										<a href="{% url 'candidate:hrms_candidates' %}" class="avatar"><img src="{% static 'assets/img/profiles/avatar-19.jpg' %}" alt="User Image"></a>
+										<a href="{% url 'candidate:hrms_candidates' %}">{{ candidate.get_full_name }} </a>
+									</h2>
+								</td>
+								<td>{{ candidate.skills }}</td>
+								<td>{{ candidate.experience }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="card-footer">
+				<a href="{% url 'candidate:hrms_candidates' %}">View all candidates</a>
+			</div>
+		</div>
+	</div>
+
+	
+<!-- /Statistics Widget -->
+</div>
+
+<!-- Statistics Widget - Leave & Clients-->
+<div class="row">	
+	<div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+		<div class="card card-table flex-fill">
+			<div class="card-header">
+				<h3 class="card-title mb-0">Employees</h3>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table custom-table mb-0">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for employee in employees %}
+							<tr>
+								<td>
+									<h2 class="table-avatar">
+										<a href="{% url 'employee:employees' %}" class="avatar">
+											{% if employee.photo %}
+												<img src="{{ employee.photo.url }}" alt="{{ employee.firstname }}'s profile photo">
+											{% else %}
+												{% if employee.gender == "Male" %}
+													<img src="{% static 'assets/img/profiles/it_man.png' %}" alt="Default User Image">
+												{% elif employee.gender == "Female" %}
+													<img src="{% static 'assets/img/profiles/it_woman.png' %}" alt="Default User Image">
+												{% else %}
+													<img src="{% static 'assets/img/profiles/avatar-02.jpg' %}" alt="Default User Image">
+												{% endif %}
+											{% endif %}
+										</a>
+										<a href="{% url 'employee:employees' %}">{{ employee.get_full_name }} <span>{{ employee.designation }}</span></a>
+									</h2>
+								</td>
+								<td>{{ employee.email }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="card-footer">
+				<a href="{% url 'employee:employees' %}">View all employees</a>
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="col-md-6 text-center">
+		<div class="card">
+			<div class="card-body">
+				<h3 class="card-title">Salary Distribution</h3>
+				<div id="salary-distribution-chart"></div>
+			</div>
+		</div>
+	</div>
+
+	
+	{% comment %} <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+		<div class="card card-table flex-fill">
+			<div class="card-header">
+				<h3 class="card-title mb-0">Clients</h3>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table custom-table mb-0">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Company</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for client in clients %}
+							<tr>
+								<td>
+									<h2 class="table-avatar">
+										<a href="#" class="avatar"><img src="{% static 'assets/img/profiles/avatar-19.jpg' %}" alt="User Image"></a>
+										<a href="client-profile.html">{{ client.get_full_name }} </a>
+									</h2>
+								</td>
+								<td>{{ client.email }}</td>
+								<td>{{ client.company_name }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="card-footer">
+				<a href="{% url 'client:clients' %}">View all Clients</a>
+			</div>
+		</div>
+	</div> {% endcomment %}
+
+	
+<!-- /Statistics Widget -->
+</div>
+
+<script src="{%static 'assets/js/jquery-3.7.1.min.js'%}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    
+<script src="{%static 'assets/js/chart.js'%}"></script><!-- Embed the salary data as JSON -->
+<script>
+	$(document).ready(function() {
+		// Salary data obtained from Django view
+		var salaryData = {{ salary_data|safe }};
+	
+		// Prepare data for Morris.js
+		var chartData = salaryData.map((salary, index) => ({
+			employee: `Employee ${index + 1}`,
+			salary: parseFloat(salary)
+		}));
+	
+		// Initialize Morris.js Bar Chart
+		Morris.Bar({
+			element: 'salary-distribution-chart',
+			data: chartData,
+			xkey: 'employee',
+			ykeys: ['salary'],
+			labels: ['Salary'],
+			barColors: ['#2c9792'],
+			resize: true
+		});
+	});
+	
+</script>
+{% endblock %}			

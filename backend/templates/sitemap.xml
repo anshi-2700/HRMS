@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+    <loc>https://nexushr.io/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>1.00</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/jobs/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/about/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/portfolio-home/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/app/login/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/hrms/home/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/app/candidate/enroll/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/app/candidate/apply/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/terms_and_conditions/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/privacy_policy/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.80</priority>
+</url>
+<url>
+    <loc>https://nexushr.io/app/sign-up/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+    <priority>0.64</priority>
+</url>
+
+
+</urlset>

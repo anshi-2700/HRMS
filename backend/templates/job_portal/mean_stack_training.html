@@ -1,0 +1,318 @@
+{% extends "job_portal/base.html" %}
+
+{% block og_title %}Full Stack Developer Training Globally | MEAN & MERN Stack Courses | Nexus{% endblock %}
+{% block og_description %}Join Nexus's Full Stack Developer Training Globally. Master MEAN & MERN stacks with expert trainers, hands-on projects, and a 2-month internship. Enroll now!{% endblock %}
+{% block og_url %}https://Nexus.com/full-stack-training{% endblock %}
+{% block title %}Full Stack Developer Training Globally: Master MEAN & MERN Stacks at Nexus{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+  <div class="container my-5 pt-5 pb-4">
+    <h1 class="display-3 text-white mb-3 animated slideInDown">Full Stack Developer Training</h1>
+  </div>
+</div>
+
+<section id="overview" class="py-5">
+  <div class="container">
+    <h2 class="text-primary text-center mb-4">Become a Full Stack Developer with Our MEAN/MERN Stack Training</h2>
+    <p class="text-muted text-center mb-5">Accelerate Your Career in Web Development</p>
+    
+    <div class="row mb-5">
+      <div class="col-md-6">
+        <p>Are you ready to dive into the world of full stack development? Our comprehensive training programs in MEAN (MongoDB, Express.js, Angular, Node.js) and MERN (MongoDB, Express.js, React, Node.js) stacks are designed to equip you with the skills needed to build dynamic, data-driven web applications.</p>
+        <ul>
+          <li><strong>Experienced Trainers:</strong> Learn from seasoned software developers with years of industry experience.</li>
+          <li><strong>Hands-on Projects:</strong> Gain practical knowledge through real-world projects.</li>
+          <li><strong>2-Month Internship:</strong> Apply your skills in a professional setting with our internship program.</li>
+          <li><strong>SCRUM Methodology Coaching:</strong> Master agile project management techniques.</li>
+          <li><strong>Version Control with BitBucket:</strong> Get proficient in collaborative coding and version control systems.</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <img src="{% static 'job_portal/img/cover1.jpg' %}" alt="Full Stack Training" class="img-fluid rounded">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contactForm" class="py-5" style="background: #f8f9fa;">
+  <div class="container">
+    <div class="card shadow-lg rounded p-5 bg-white">
+      <h3 class="text-center text-primary">Enroll Here</h3>
+      <p class="text-muted text-center mb-4">Join our professional training courses Globally</p>
+      <form id="submit-form" action="#" class="php-email-form">
+        {% csrf_token %}
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="name" class="form-label">Your Name</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="form-group mt-3">
+              <label for="email" class="form-label">Your Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group mt-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+            </div>
+          </div>
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="form-group mt-3">
+              <label for="course_interest" class="form-label">Course of Interest</label>
+              <select class="form-control" id="course_interest" name="course_interest" required>
+                <option value="">Select a Course</option>
+                <option value="MEAN Stack training">MEAN Stack</option>
+                <option value="MERN Stack training">MERN Stack</option>
+              </select>
+            </div>
+            <div class="form-group mt-3">
+              <label for="preferred_schedule" class="form-label">Preferred Schedule</label>
+              <select class="form-control" id="preferred_schedule" name="preferred_schedule" required>
+                <option value="">Select a Schedule</option>
+                <option value="Weekday">Weekday</option>
+                <option value="Weekend">Weekend</option>
+                <option value="Evening">Evening</option>
+              </select>
+            </div>
+            <div class="form-group mt-3">
+              <label for="comments" class="form-label">Additional Comments</label>
+              <textarea class="form-control" id="comments" name="comments" rows="4" placeholder="Any specific requirements or questions?" required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary">Enroll Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="course-overview" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">Course Overview</h2>
+      <p class="lead text-muted">Choose between MEAN or MERN stack training based on your career goals.</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <h3 class="text-center text-primary">MEAN Stack Training</h3>
+        <p class="text-muted">Dive deep into the MEAN stack to develop scalable web applications using:</p>
+        <ul>
+          <li><strong>MongoDB:</strong> NoSQL database for high-performance data storage.</li>
+          <li><strong>Express.js:</strong> Fast, unopinionated, minimalist web framework for Node.js.</li>
+          <li><strong>Angular:</strong> Front-end framework for building dynamic user interfaces.</li>
+          <li><strong>Node.js:</strong> JavaScript runtime built on Chrome's V8 engine.</li>
+        </ul>
+      </div>
+      <div class="col-md-6 mb-4">
+        <h3 class="text-center text-primary">MERN Stack Training</h3>
+        <p class="text-muted">Master the MERN stack to build full-fledged applications using:</p>
+        <ul>
+          <li><strong>MongoDB:</strong> NoSQL database for high-performance data storage.</li>
+          <li><strong>Express.js:</strong> Fast, unopinionated, minimalist web framework for Node.js.</li>
+          <li><strong>React:</strong> JavaScript library for building user interfaces.</li>
+          <li><strong>Node.js:</strong> JavaScript runtime built on Chrome's V8 engine.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="methodology" class="py-5">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">What You'll Learn</h2>
+      <p class="lead text-muted">From building RESTful APIs to agile development methodologies, we cover it all.</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <ul class="list-unstyled">
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Building RESTful APIs with Node.js and Express.js</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Front-end development with Angular or React</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Database design and management with MongoDB</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Implementing authentication and security</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Deployment and scaling of applications</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Version control with Git and BitBucket</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Agile development with SCRUM methodology</li>
+        </ul>
+      </div>
+      <div class="col-md-6 mb-4 text-center">
+        <img src="{% static 'job_portal/img/cover2.jpg' %}" alt="Course Content" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="internship" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">2-Month Internship Program</h2>
+      <p class="lead text-muted">Apply your skills in a professional setting with our internship program.</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <p>After completing the training, participate in a two-month internship to:</p>
+        <ul class="list-unstyled">
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Work on live projects</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Experience real-world software development environments</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Collaborate using BitBucket for version control</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Practice SCRUM in daily workflows</li>
+        </ul>
+      </div>
+      <div class="col-md-6 mb-4 text-center">
+        <img src="{% static 'job_portal/img/cover3.jpg' %}" alt="Internship Program" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="py-5">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">Tools and Technologies You'll Use</h2>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <ul class="list-unstyled">
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Development Tools: Visual Studio Code, WebStorm</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Databases: MongoDB, Mongoose</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Frameworks and Libraries: Angular, React, Express.js</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Version Control: Git, BitBucket</li>
+          <li><i class="fa fa-check-circle text-primary me-2"></i> Project Management: SCRUM methodologies</li>
+        </ul>
+      </div>
+      <div class="col-md-6 mb-4 text-center">
+        <img src="{% static 'job_portal/img/cover4.jpg' %}" alt="Development Tools" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section id="trainers" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">Meet Our Trainers</h2>
+      <p class="lead text-muted">Learn from industry professionals with extensive experience in full stack development.</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="trainer-card text-center">
+          <h5 class="text-primary">Trainer Name</h5>
+          <p class="text-muted">Brief bio about the trainer's experience and expertise.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="trainer-card text-center">
+          <h5 class="text-primary">Trainer Name</h5>
+          <p class="text-muted">Brief bio about the trainer's experience and expertise.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="trainer-card text-center">
+          <h5 class="text-primary">Trainer Name</h5>
+          <p class="text-muted">Brief bio about the trainer's experience and expertise.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section id="faq" class="py-5 bg-light">
+  <div class="container">
+    <div class="section-title text-center mb-5">
+      <h2 class="text-primary">Frequently Asked Questions</h2>
+      <p class="lead text-muted">Get answers to common queries about our training program.</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <h5>Do I need prior programming experience?</h5>
+        <p>Basic knowledge of JavaScript is recommended but not mandatory.</p>
+      </div>
+      <div class="col-md-6 mb-4">
+        <h5>What career support do you offer?</h5>
+        <p>We provide guidance on resume building and interview preparation.</p>
+      </div>
+      <div class="col-md-6 mb-4">
+        <h5>Can I choose between MEAN and MERN stack training?</h5>
+        <p>Yes, you can select the stack that aligns with your career goals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="py-5">
+  <div class="container text-center">
+      <p class="lead text-muted">Secure your spot in our training program today.</p>
+      <a href="#contactForm" class="btn btn-primary">Enroll Now</a>
+  </div>
+</section>
+
+<!-- Scripts -->
+<script src="{% static 'assets/js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/app.js' %}"></script>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById("password");
+        var passwordIcon = document.getElementById("password-icon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            passwordIcon.classList.remove("fa-eye-slash");
+            passwordIcon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            passwordIcon.classList.remove("fa-eye");
+            passwordIcon.classList.add("fa-eye-slash");
+        }
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{%static 'assets/js/jquery-3.7.1.min.js'%}"></script>
+
+<script>
+    $("#submit-form").submit((e) => {
+        e.preventDefault();
+		const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        $.ajax({
+            url: "https://script.google.com/macros/s/AKfycbyxzRzjygEh1l0AHrTD6uEXKGilEkmYjCeC0YGk1wABLOureKv6sv1aah09itDpLgL6GQ/exec",
+            data: $("#submit-form").serialize() + '&csrfmiddlewaretoken=' + csrfToken,
+            method: "POST",
+            success: function (response) {
+                // Use SweetAlert for success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Your Message is sent to Nexus Global Technologies Inc..',
+                }).then(() => {
+                    window.location.reload();
+                });
+            },
+            error: function (err) {
+                // Use SweetAlert for error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Something went wrong.',
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

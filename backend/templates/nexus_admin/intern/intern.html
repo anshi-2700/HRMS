@@ -1,0 +1,76 @@
+{% extends "nexus_admin/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Section: Design Block -->
+<section class="" style="margin-top: -3%;">    
+    <div class="px-4 py-5 px-md-5 text-center text-lg-start" >
+
+      <div class="container">
+        <h3 style="margin-top: 3%;color: #2c9792;">Intern Details</h3>       
+
+        <div class="row gx-lg-5 align-items-center">     
+          <div class="col-md-6 mb-5 mb-lg-0"> 
+            <div class="card">
+              <div class="card-body py-5 px-md-5">
+
+                <div class="form-outline mb-4">  
+                  <label class="form-label" for="form3Example1" style="color: black; font-weight: bolder;">Name</label> 
+                  {{ instance.name }}  
+                </div>
+                <div class="form-outline mb-4"> 
+                  <label class="form-label" for="form3Example2" style="color: black; font-weight: bolder;">Email</label>
+                  {{ instance.email }}  
+                </div>  
+                <!-- phone input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example3" style="color: black; font-weight: bolder;">Phone</label>
+                  {{ instance.phone }}
+                </div>
+                <!-- intern_linkedin input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example3" style="color: black; font-weight: bolder;">LinkedIn</label>
+                  {% if instance.intern_linkedin %}
+                  <a href="{{ instance.intern_linkedin }}" target="_blank">LinkedIn Profile</a>
+                  {% endif %}
+                </div>  
+                <!-- intern_git input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example4" style="color: black; font-weight: bolder;">Git Link</label>
+                  {% if instance.intern_git %}
+                  <a href="{{ instance.intern_git }}" target="_blank">Git Profile</a>
+                  {% endif %}
+                </div> 
+                <!-- resume input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example4" style="color: black; font-weight: bolder;">Resume</label>
+                  {% if instance.resume %}
+                  <a href="{{ instance.resume.url }}" target="_blank">View Resume</a>
+                  {% endif %}
+                </div> 
+                <!-- skills input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example4" style="color: black; font-weight: bolder;">Skills</label>
+                  {{ instance.skills }}
+                </div> 
+                <!-- domain input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example4" style="color: black; font-weight: bolder;">Domain</label>
+                  {{ instance.domain }}
+                </div> 
+                <!-- date_added input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form3Example4" style="color: black; font-weight: bolder;">Date added</label>
+                  {{ instance.date_added }}
+                </div> 
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+{% endblock %}

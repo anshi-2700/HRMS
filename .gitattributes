@@ -1,0 +1,5 @@
+static/** linguist-vendored
+staticfiles/** linguist-vendored
+templates/** linguist-vendored
+docs/** linguist-documentation
+*.sh text eol=lf

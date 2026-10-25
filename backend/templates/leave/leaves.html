@@ -1,0 +1,369 @@
+{% extends "base/base_employee.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="content container-fluid">
+
+	<!-- Page Header -->
+	<div class="page-header">
+		<div class="row align-items-center">
+			<div class="col">
+				<h3 class="page-title">Leaves</h3>
+				<ul class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'main:employee_dashboard' %}">Dashboard</a></li>
+					<li class="breadcrumb-item active">Leaves</li>
+				</ul>
+			</div>
+			<div class="col-auto float-end ms-auto">
+				<a href="#" class="btn add-btn" onclick="loadCreateLeaveForm()"  data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa-solid fa-plus"></i> Request Leave</a>
+			</div>
+		</div>
+	</div>
+	<!-- /Page Header -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-striped custom-table mb-0 datatable">
+					<thead>
+						<tr>
+							<th>Sl. No.</th>
+							<th>Leave Type</th>
+							<th>From</th>
+							<th>To</th>
+							<th>No of Days</th>
+							<th>Reason</th>
+							<th class="text-center">Status</th>
+							{% comment %} <th class="text-end">Actions</th> {% endcomment %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for leave in leaves %}
+						<tr>
+							<td>{{forloop.counter}}</td>
+							<td>{{ leave.leavetype }}</td>
+							<td>{{ leave.startdate }}</td>
+							<td>{{ leave.enddate }}</td>
+							<td>{{ leave.leave_days }}</td>
+							<td>{{ leave.reason }}</td>
+							{% if leave.status == "Pending" %}								 
+								<td><i class="fa-regular fa-circle-dot text-info"></i> Pending</td>
+							{% elif leave.status == "Approved" %}
+								<td><i class="fa-solid fa-check text-success"></i> Approved</td>
+							{% else %} 
+								<td><i class="fa-solid fa-xmark text-danger"></i> Rejected</td>
+							{% endif %}
+						</tr>							
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Page Content -->
+
+<!-- Add Leave Modal -->
+<div id="add_leave" class="modal custom-modal fade" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Leave</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="create_form" method="post" action="{% url 'employee:create_leave' %}" enctype="multipart/form-data">
+					{% csrf_token %}
+					
+					<div class="input-block mb-3">
+					  <label class="col-form-label">Leave Type <span class="text-danger">*</span></label>
+					  	{{ form.leavetype }}
+						{% if form.leavetype.errors %}
+						<span class="error">{{ form.leavetype.errors.0 }}</span>
+						{% endif %}
+					</div>
+		  
+					<div class="input-block mb-3">
+					  <label class="col-form-label">From <span class="text-danger">*</span></label>
+					  {{ form.startdate }}
+					  {% if form.startdate.errors %}
+					  <span class="error">{{ form.startdate.errors.0 }}</span>
+					  {% endif %}
+					</div>
+		  
+					<div class="input-block mb-3">
+					  <label class="col-form-label">To <span class="text-danger">*</span></label>					  
+					  {{ form.enddate }}
+					  {% if form.enddate.errors %}
+					  <span class="error">{{ form.enddate.errors.0 }}</span>
+					  {% endif %}
+					</div>
+		  
+					<div class="input-block mb-3">
+					  <label class="col-form-label">Number of leave days <span class="text-danger">*</span></label>
+					  {{ form.leave_days }}
+					  {% if form.leave_days.errors %}
+					  <span class="error">{{ form.leave_days.errors.0 }}</span>
+					  {% endif %}
+					</div>
+		  
+					<div class="input-block mb-3">
+					  <label class="col-form-label">Remaining Leaves (without considering this leave)<span class="text-danger">*</span></label>
+					  {{ form.remaining_days }} 
+					  {% if form.remaining_days.errors %}
+					  <span class="error">{{ form.remaining_days.errors.0 }}</span>
+					  {% endif %}
+					</div>
+		  
+					<div class="input-block mb-3">
+					  <label class="col-form-label">Leave Reason <span class="text-danger">*</span></label>
+					  	{{ form.reason }}
+						{% if form.reason.errors %}
+						<span class="error">{{ form.reason.errors.0 }}</span>
+						{% endif %}
+					</div>
+		  
+					<div class="submit-section">
+					  <button class="btn btn-primary submit-btn" type="submit" onclick="submitCreateForm(event)">Submit</button>
+					</div>
+				  </form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /Add Leave Modal -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Add JavaScript code to handle form submission and show SweetAlert messages -->
+
+<script>
+	
+
+	function loadUpdateLeaveForm(element, leaveId) {
+	
+		// Construct the URL with a hardcoded path
+		const editUrl = `/app/employee/leave/edit/${leaveId}/`;
+	
+		// Fetch the URL using the provided leaveId
+		fetch(editUrl)
+			.then(response => response.text())
+			.then(data => {	
+				// Find the form element in the fetched data
+				var formElement = document.querySelector('#update_form_' + leaveId);	
+				// Append the form to the modal body
+				var modalBody = document.querySelector('#edit_leave_modal .modal-body');
+				modalBody.appendChild(formElement);
+	
+				// Show the modal for updating leaves
+				$('#edit_leave_modal_' + leaveId).modal('show');
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	}	
+		
+	function loadCreateLeaveForm() {
+		fetch("{% url 'employee:create_leave' %}")
+        .then(response => response.text())
+        .then(data => {            
+            // Create a temporary element to hold the form HTML
+            var tempElement = document.createElement('div');
+            tempElement.innerHTML = data;
+
+            // Find the form element in the temporary element
+            var formElement = tempElement.querySelector('#create_form');
+
+            // Append the form to the modal body
+            var modalBody = document.querySelector('#add_leave .modal-body');
+            modalBody.innerHTML = '';
+            modalBody.appendChild(formElement);
+
+            // Show the modal
+            $('#add_leave').modal('show');
+			 // Attach event listeners after the form is loaded
+			 attachEventListeners();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+	function attachEventListeners() {
+		// Event listener for #id_leavetype
+		// leave type based remaining_days load -Ajax
+		$('#id_leavetype').change(function() {
+			var url = "{% url 'employee:ajax_load_remaining_days'%}";
+			var leavetype_id = $(this).val();
+			var leaveType = $(this).find("option:selected").text(); // Get the text of the selected leave type
+			$.ajax({
+				url: url,
+				data: {
+					'leavetype': leaveType
+				},
+				success: function(data) {
+					var remainingDaysValue = $(data).val(); // Extract value from HTML response
+					$("#id_remaining_days").val(remainingDaysValue); // Set value of input field
+				},
+				error: function(xhr, status, error) {
+					console.error('Error:', error);
+				}
+			});
+		});
+		// Event listener for #id_startdate
+		$(document).ready(function() {
+			// Event listener for start date change
+			$('#id_startdate').on('change', function() {
+				// Get today's date
+				var today = new Date();
+			
+				// Get the selected start date
+				var startDate = new Date(this.value);
+				
+				// Check if the selected start date is earlier than today's date
+				if (startDate < today) {
+					// Reset the value of the start date input to today's date
+					this.value = today.toISOString().slice(0,10);
+				}
+				updateLeaveDays();
+				//updateRemainingDays(); 
+			});
+		
+			// Event listener for end date change
+			$('#id_enddate').on('change', function() {
+				updateLeaveDays();
+				//updateRemainingDays(); 
+			});
+		});
+		
+	}
+	// Event listener for end date change
+	function calculateLeaveDays(startDateString, endDateString, leaveTypeDays) {
+		var startDate = new Date(startDateString);
+		var endDate = new Date(endDateString);
+		var diffTime = Math.abs(endDate - startDate);
+		var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+		if (diffDays === 0) {
+			return 1;
+			} else if (diffDays < 1) {
+			return "to should be greater than from " ;
+			} else {
+			return diffDays + 1;
+			}
+	}
+
+	function calculateRemainingDays(approvedLeaveDays, leaveTypeDays) {
+		var remainingDays = leaveTypeDays - approvedLeaveDays;
+		return Math.max(0, remainingDays);
+	}
+	// Function to calculate and update leave days
+	function updateLeaveDays() {
+		var startDate = $('#id_startdate').val();
+		var endDate = $('#id_enddate').val();
+		var leaveTypeDays = parseInt($('#id_leave_days').val()); // Assuming you have a hidden input field with leave type days
+		var leaveDays = calculateLeaveDays(startDate, endDate, leaveTypeDays);
+		$('#id_leave_days').val(leaveDays);
+	}
+	
+	function submitCreateForm(event) {
+	event.preventDefault();  // Prevent the default form submission behavior
+	var form = document.getElementById('create_form');
+	var formData = new FormData(form);
+
+	fetch(form.action, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.json())
+	.then(data => {
+		// Corrected variable name here
+		if (data.status === 'true') {
+		showSweetAlert(data.message, data.status, data.redirect_url);
+		} else if (data.status === 'form_error') {
+		showSweetAlert(data.message, 'form_error');
+		} else if (data.status === 'false') {
+		showSweetAlert(data.message, data.status);
+		} else {
+		showSweetAlert(data.message, 'error');
+		}
+	})
+	.catch(error => {
+		console.error('Error:', error);
+	});
+	}
+
+	function showSweetAlert(message, status, redirectUrl) {
+	if (status === 'true') {
+		Swal.fire({
+		icon: 'success',
+		title: 'Success!',
+		text: message,
+		showConfirmButton: true,
+		allowOutsideClick: false, // Prevent closing on outside click
+
+		didClose: () => {
+			if (redirectUrl) {
+			// Combine the redirect URL with the current protocol and host to get the full URL
+			var fullRedirectUrl = window.location.origin + redirectUrl;
+			window.location.href = fullRedirectUrl;
+			}
+		}
+		});
+	} else if (status === 'form_error') {
+		Swal.fire({
+		icon: 'error',
+		title: 'Form Validation Error!',
+		html: message,  // Display form errors as HTML
+		showConfirmButton: true,
+		allowOutsideClick: false,
+		});
+	} else if (status === 'false') {
+		Swal.fire({
+		icon: 'error',
+		title: 'Form Error!',
+		text: 'Error: ' + message,
+		showConfirmButton: true,
+		allowOutsideClick: false, // Prevent closing on outside click
+		});
+	} else {
+		Swal.fire({
+		icon: 'error',
+		title: 'Error!',
+		text: 'Error: ' + message,
+		showConfirmButton: true,
+		allowOutsideClick: false, // Prevent closing on outside click
+		});
+	}
+	}
+
+	function submitUpdateForm(event,leaveId) {
+	event.preventDefault();  // Prevent the default form submission behavior
+	var form = document.getElementById('update_form_' + leaveId);
+	var formData = new FormData(form);
+
+	fetch(form.action, {
+		method: 'POST',
+		body: formData,
+	})
+	.then(response => response.json())
+	.then(data => {
+		// Corrected variable name here
+		if (data.status === 'true') {
+		showSweetAlert(data.message, data.status, data.redirect_url);
+		} else if (data.status === 'form_error') {
+		showSweetAlert(data.message, 'form_error');
+		} else if (data.status === 'false') {
+		showSweetAlert(data.message, data.status);
+		} else {
+		showSweetAlert(data.message, 'error');
+		}
+	})
+	.catch(error => {
+		console.error('Error:', error);
+	});
+	}	
+</script>
+
+{% endblock %}
