@@ -1,60 +1,83 @@
 # Nexus Workforce OS
 
 > **Enterprise Human Resource & Workforce Intelligence Platform**  
-> Built with a decoupled architecture featuring a modern **React SPA frontend** and a high-performance **Django Ninja REST API backend**.
+> Built with a decoupled high-performance architecture:
+> - **Frontend**: React 19 + TypeScript + Tailwind CSS v4 + Vite
+> - **Backend**: Python 3.11+ (FastAPI) + SQLAlchemy + Pydantic v2 + SQLite / PostgreSQL
 
 ---
 
 ## 🏛️ System Architecture
 
-Nexus Workforce OS is engineered with a strict decoupling of the presentation layer from the core business logic and persistence layer:
+Nexus Workforce OS features a decoupled architecture separating enterprise presentation logic from high-throughput asynchronous backend microservices:
 
 ```
 nexus-workforce-os/
-├── backend/                       # Python & Django Ninja High-Performance REST API
-│   ├── apps/                      # Modular Domain Services
-│   │   ├── employee/              # Employee profiles, departments, designations
-│   │   ├── attendance/            # Attendance register & punch logs
-│   │   ├── leave_tracker/         # Leave policies, balances, & approval workflows
-│   │   ├── payroll/               # Fixed-point compensation & salary generation
-│   │   ├── job/ & candidate/      # Recruitment, requisitions, & ATS hiring stages
-│   │   ├── asset/                 # Corporate hardware inventory & depreciation
-│   │   └── user/ & main/          # Access control, multi-company isolation
-│   ├── config/
-│   │   ├── api.py                 # Django Ninja typed REST API & OpenAPI router
-│   │   └── settings/              # Environment configurations (CORS, CSRF, Database)
-│   ├── compose/                   # Production & local Dockerfile definitions
-│   └── manage.py
+├── backend/                       # Python & FastAPI High-Performance REST API
+│   ├── app/                       # Core Application Package
+│   │   ├── api/                   # Typed REST API Routers
+│   │   │   ├── auth.py            # Authentication, JWT tokens, & sessions
+│   │   │   ├── dashboard.py       # Aggregated executive KPIs & metrics
+│   │   │   ├── employees.py       # Employee CRUD & department filtering
+│   │   │   ├── attendance.py      # Clock-in / clock-out punches & registers
+│   │   │   ├── leaves.py          # Leave applications & approval workflows
+│   │   │   ├── payroll.py         # Remuneration ledger & payslip records
+│   │   │   ├── recruitment.py     # Requisitions & ATS candidate pipeline
+│   │   │   ├── assets.py          # IT hardware asset registry & valuation
+│   │   │   └── health.py          # Liveness & database status probes
+│   │   ├── core/                  # Engine, DB sessions, JWT, & bcrypt security
+│   │   ├── models/                # SQLAlchemy relational entity models
+│   │   ├── schemas/               # Pydantic v2 validation contracts
+│   │   ├── main.py                # FastAPI ASGI application & middleware
+│   │   └── seed.py                # Enterprise demo database seeder
+│   ├── Dockerfile                 # Container definition with Uvicorn ASGI
+│   └── requirements.txt           # Python dependencies
 │
-├── frontend/                      # Modern React + Vite Single Page Application (SPA)
+├── frontend/                      # React 19 + TypeScript + Tailwind CSS v4 SPA
 │   ├── src/
-│   │   ├── components/            # UI Views (Dashboard, Attendance, Directory, Leaves, etc.)
-│   │   ├── api.js                 # Unified REST client with session & cookie management
-│   │   ├── index.css              # Custom design system (Dark/Light mode, tokens, animations)
-│   │   └── App.jsx                # Main orchestration & reactive state management
-│   ├── package.json
-│   └── vite.config.js             # Development server with /api proxy
+│   │   ├── components/            # High-fidelity TSX Views & Modals
+│   │   │   ├── DashboardView.tsx  # Executive overview & workforce charts
+│   │   │   ├── EmployeesView.tsx  # Directory, roster search & filtering
+│   │   │   ├── AttendanceView.tsx # Live clock-in/out & punch history
+│   │   │   ├── LeavesView.tsx     # Leave approval workflow & ledger
+│   │   │   ├── PayrollView.tsx    # Monthly salary slips & disbursements
+│   │   │   ├── RecruitmentView.tsx# ATS pipeline stages & open requisitions
+│   │   │   ├── AssetsView.tsx     # Hardware inventory & capitalization
+│   │   │   ├── Sidebar.tsx        # Responsive navigation sidebar
+│   │   │   ├── Topbar.tsx         # User status, persona switch & health
+│   │   │   ├── AddEmployeeModal.tsx
+│   │   │   ├── ApplyLeaveModal.tsx
+│   │   │   └── LoginModal.tsx     # 1-Click demo persona authentication
+│   │   ├── types/                 # Strict TypeScript data models & interfaces
+│   │   ├── api.ts                 # Typed API client with auto-JWT handling
+│   │   ├── index.css              # Tailwind CSS v4 styling & modern scrollbars
+│   │   ├── App.tsx                # Central reactive state & view routing
+│   │   └── main.tsx               # React 19 root entrypoint
+│   ├── Dockerfile                 # Node Alpine container definition
+│   ├── package.json               # Frontend dependencies & scripts
+│   ├── tsconfig.json              # Strict TypeScript compiler options
+│   └── vite.config.ts             # Tailwind CSS v4 Vite plugin & /api proxy
 │
-├── docker-compose.yml             # Orchestrates Frontend, Backend, PostgreSQL 15, & Redis 7
+├── docker-compose.yml             # Orchestrates Frontend, FastAPI Backend, & PostgreSQL 15
 ├── start-all.bat                  # 1-Click launcher using Docker Compose
-├── start-local.bat                # 1-Click launcher for local dev (two separate windows)
-├── start-backend.bat              # Dedicated launcher for Backend API (Port 8000)
+├── start-local.bat                # 1-Click launcher for local dev (separate windows)
+├── start-backend.bat              # Dedicated launcher for FastAPI Backend (Port 8000)
 ├── start-frontend.bat             # Dedicated launcher for React SPA (Port 5173)
-└── stop-all.bat                   # 1-Click stopper to halt all running containers
+└── stop-all.bat                   # 1-Click stopper to halt running containers
 ```
 
 ---
 
 ## ✨ Platform Capabilities
 
-- **Executive Analytics Dashboard** — Real-time headcount counters, daily presence ratio, on-leave metrics, and workforce activity logs.
-- **Employee Directory** — Departmental filtering, role hierarchy, contact information, and automated credential creation.
+- **Executive Analytics Dashboard** — Real-time headcount counters, daily presence ratios, active leaves, salary disbursement metrics, and workforce activity logs.
+- **Employee Directory** — Departmental filtering, role hierarchy, contact information, and automatic credential provisioning.
 - **Attendance & Time Clock** — Instant clock-in / clock-out tracking with status validation (Present, Half-Day, Absent).
-- **Leave Approval Workflow** — Self-service leave applications with 1-click management review (Approve / Reject) and policy allowances.
-- **Compensation & Payroll** — Accurate salary disbursement records, fixed-point calculation, and payslip generation.
-- **Recruitment & Applicant Pipeline** — Active job requisitions and candidate hiring pipeline tracking (Applicant → Interview → Offer → Hired).
-- **Corporate Asset Management** — Equipment valuation, serial tracking, purchase logs, and automatic useful-life depreciation calculations.
-- **Interactive OpenAPI Engine** — Automatic typed documentation and sandbox testing powered by Django Ninja at `/api/docs`.
+- **Leave Governance Workflow** — Self-service leave applications with 1-click management review (Approve / Reject) and policy allowances.
+- **Compensation & Payroll** — Accurate monthly salary disbursement records, allowances, tax deductions, and payslip generation.
+- **Recruitment & ATS Pipeline** — Active job requisitions and candidate hiring pipeline tracking (Applied → Screened → Interview → Offered → Hired).
+- **Corporate Asset Management** — IT workstation inventory, serial identifiers, custodial allocation, and valuation tracking.
+- **Interactive OpenAPI 3.0 Engine** — Automatic typed interactive API documentation and sandbox testing powered by FastAPI at `/api/docs`.
 
 ---
 
@@ -91,24 +114,20 @@ docker compose down
 
 Double-click **`start-local.bat`** to start both Backend and Frontend in separate windows simultaneously, or run each individually:
 
-#### 1. Start the Backend API:
+#### 1. Start the Backend API (FastAPI):
 ```bash
 # Windows 1-click launcher:
 .\start-backend.bat
 
 # Or manual execution:
 cd backend
-..\venv\Scripts\activate
-pip install -r requirements/local.txt
-python manage.py migrate
-python manage.py seed_demo_data
-python manage.py runserver 0.0.0.0:8000
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 - **Backend URL**: [http://localhost:8000](http://localhost:8000)
 - **Interactive Swagger Docs**: [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
-- **Django Admin**: [http://localhost:8000/admin/](http://localhost:8000/admin/)
+- **OpenAPI Schema**: [http://localhost:8000/api/openapi.json](http://localhost:8000/api/openapi.json)
 
-#### 2. Start the Frontend SPA:
+#### 2. Start the Frontend SPA (React + TypeScript + Tailwind v4):
 ```bash
 # Windows 1-click launcher:
 .\start-frontend.bat
@@ -126,16 +145,15 @@ npm run dev
 
 | Service | Address | Description |
 | :--- | :--- | :--- |
-| **Frontend Application** | [http://localhost:5173](http://localhost:5173) | Interactive React HRMS Dashboard, Attendance, Leaves, & Employees |
-| **Backend REST API** | [http://localhost:8000/api/docs](http://localhost:8000/api/docs) | Interactive OpenAPI Swagger API Documentation |
-| **API Health Check** | [http://localhost:8000/api/health](http://localhost:8000/api/health) | API Status & Verification Endpoint |
-| **Superuser Admin** | [http://localhost:8000/admin/](http://localhost:8000/admin/) | Django Superuser Admin Dashboard |
+| **Frontend Application** | [http://localhost:5173](http://localhost:5173) | Interactive React + TypeScript + Tailwind v4 HRMS Application |
+| **Backend REST API** | [http://localhost:8000/api/docs](http://localhost:8000/api/docs) | Interactive Swagger UI API Documentation |
+| **API Health Check** | [http://localhost:8000/api/health](http://localhost:8000/api/health) | API Status & Database Health Probe |
 
 ---
 
 ## 🔑 Demo Access Accounts
 
-Use these accounts to sign in or use the 1-click role switcher inside the frontend header:
+Use these accounts to sign in or use the 1-click role buttons inside the Sign In modal:
 
 | Role | Username | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
@@ -148,11 +166,10 @@ Use these accounts to sign in or use the 1-click role switcher inside the fronte
 ## 🧪 Testing & Validation
 
 ```bash
-# Run backend test suite
-cd backend
-pytest
+# Run TypeScript type check
+cd frontend
+npx tsc --noEmit
 
 # Build frontend production bundle
-cd frontend
 npm run build
 ```

@@ -1,5 +1,11 @@
 @echo off
-echo Starting Nexus Workforce API (Django Ninja)...
+echo ========================================================
+echo   Starting Nexus Workforce OS Backend (Python FastAPI)
+echo ========================================================
 cd /d %~dp0backend
-call ..\venv\Scripts\activate.bat
-python manage.py runserver 0.0.0.0:8000
+
+if exist ..\venv\Scripts\activate.bat (
+    call ..\venv\Scripts\activate.bat
+)
+
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload

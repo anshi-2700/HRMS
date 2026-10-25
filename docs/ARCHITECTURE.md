@@ -9,32 +9,33 @@ Nexus Workforce OS is an enterprise-grade workforce intelligence platform built 
 The system is split into two primary layers:
 
 ### 1. Presentation Layer (`frontend/`)
-- **Technology**: React 19, Vite, Vanilla CSS Design System.
-- **Role**: Single Page Application (SPA) offering real-time user experiences for attendance, workforce analytics, leave tracking, and payroll.
-- **API Connection**: Interacts with the backend via typed REST calls with credentials and session preservation.
+- **Technology**: React 19, TypeScript, Tailwind CSS v4, Lucide Icons, Vite.
+- **Role**: High-performance Single Page Application (SPA) offering responsive experiences for attendance, workforce analytics, leave tracking, payroll registers, ATS recruiting pipelines, and hardware assets.
+- **API Connection**: Interacts with the backend via typed REST calls with JWT bearer tokens and reverse proxy mapping.
 
 ### 2. Business Logic & API Layer (`backend/`)
-- **Technology**: Python 3.11, Django 5, Django Ninja REST API, PostgreSQL 15, Redis 7.
-- **Role**: Domain services, permission validation, persistence, and automated Swagger `/api/docs` generation.
+- **Technology**: Python 3.11+, FastAPI (ASGI), SQLAlchemy 2.0 ORM, Pydantic v2 schemas, PostgreSQL 15 / SQLite, Uvicorn ASGI server.
+- **Role**: High-throughput asynchronous REST APIs, RBAC authorization, transactional persistence, auto database seeding, and automated OpenAPI 3.0 documentation at `/api/docs`.
 
 ---
 
 ## 📦 Domain Modules
 
-| Domain Module | Underlying App | Responsibilities |
+| Domain Module | API Route | Responsibilities |
 | :--- | :--- | :--- |
-| **Identity & Access** | `apps.user` | RBAC roles (Admin, Client, Employee), session authentication |
-| **Workforce & Staff** | `apps.employee` | Profiles, department hierarchy, designations |
-| **Attendance Clock** | `apps.employee` | Daily attendance register, clock-in / clock-out |
-| **Leave Management** | `apps.employee` | Leave categories, balances, approval workflows |
-| **Payroll Engine** | `apps.payroll` | Fixed-point salary calculation, disbursements |
-| **Talent Acquisition** | `apps.job` & `candidate` | Job requisitions, applicant tracking pipeline |
-| **Asset Register** | `apps.asset` | Hardware inventory, salvage values, straight-line depreciation |
+| **Identity & Access** | `/api/auth` | JWT issuance, verification, role-based access control (Admin, Client, Employee) |
+| **Workforce Directory** | `/api/employees` | Personnel profiles, department affiliation, salary, and status tracking |
+| **Attendance Clock** | `/api/attendance` | Real-time clock-in/out, punch ledger, work hour computation |
+| **Leave Management** | `/api/leaves` | Leave applications, multi-category quotas, approval/rejection workflows |
+| **Payroll Ledger** | `/api/payroll` | Salary slips, allowances, deductions, net remuneration disbursements |
+| **Talent Acquisition** | `/api/recruitment` | Requisitions, ATS candidate scoring, hiring pipeline stages |
+| **Asset Register** | `/api/assets` | Hardware assets, serial identifiers, allocation, and valuation tracking |
+| **Executive Metrics** | `/api/dashboard` | Aggregated executive KPIs, presence rates, and operational summary |
 
 ---
 
 ## ⚡ Deployment & Orchestration
 
-- **Containerization**: Standard Docker and Docker Compose orchestration.
-- **Database**: PostgreSQL with connection pooling.
-- **Cache & Queue**: Redis for Celery asynchronous tasks and caching.
+- **Containerization**: Multi-stage Dockerfiles and Docker Compose orchestration.
+- **Database**: PostgreSQL with connection pooling in container environments; SQLite file database for lightweight local development.
+- **API Gateway**: Reverse proxy integration via Vite in development, Nginx in production.
