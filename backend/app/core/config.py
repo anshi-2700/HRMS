@@ -3,17 +3,17 @@ from typing import List
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "Nexus Workforce OS API"
-    VERSION: str = "2.5.0"
+    PROJECT_NAME: str = "WorkNest HRMS API"
+    VERSION: str = "3.0.0"
     API_V1_STR: str = "/api"
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "nexus-super-secret-key-change-in-production-2026")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "worknest-hrms-secure-jwt-secret-key-prod-2026")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
     # Database: Supports PostgreSQL or fallbacks to SQLite for seamless local dev
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "sqlite:///./nexus.db"
+        "sqlite:///./hrms.db"
     )
 
     # CORS origins
@@ -22,10 +22,11 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5173",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
-        "https://nexushr.io",
+        "http://localhost:3000",
     ]
 
     class Config:
         case_sensitive = True
+        extra = "allow"
 
 settings = Settings()

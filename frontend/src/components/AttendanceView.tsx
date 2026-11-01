@@ -3,32 +3,43 @@ import {
   Clock, 
   LogIn, 
   LogOut, 
-  CheckCircle, 
+  CheckCircle2, 
   AlertCircle, 
   Calendar,
+  Building2,
   UserCheck
 } from 'lucide-react';
-import { AttendanceRecord, Employee } from '../types';
+import { AttendanceRecord, Employee, User } from '../types';
 
 interface AttendanceViewProps {
   attendanceRecords: AttendanceRecord[];
   employees: Employee[];
+  currentUser: User | null;
   onPunch: (employeeId: number, punchType: 'clock_in' | 'clock_out') => Promise<void>;
 }
 
 export const AttendanceView: React.FC<AttendanceViewProps> = ({
   attendanceRecords,
   employees,
+  currentUser,
   onPunch,
 }) => {
-  const [selectedEmpId, setSelectedEmpId] = useState<number>(employees[0]?.id || 1);
+  const isEmployee = currentUser?.role === 'employee';
+  const defaultEmpId = currentUser?.employee_id || employees[0]?.id || 1;
+  const [selectedEmpId, setSelectedEmpId] = useState<number>(defaultEmpId);
   const [currentTime, setCurrentTime] = useState<string>('');
   const [punching, setPunching] = useState<boolean>(false);
 
   useEffect(() => {
+    if (currentUser?.employee_id) {
+      setSelectedEmpId(currentUser.employee_id);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      setCurrentTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      setCurrentTime(now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -49,181 +60,179 @@ export const AttendanceView: React.FC<AttendanceViewProps> = ({
   const absentCount = attendanceRecords.filter(r => r.status === 'absent').length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Attendance &amp; Time Clock
+        <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+          Attendance &amp; Biometric Time Clock
         </h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-          Real-time punch biometric logging, daily shift audit, and presence verification
+        <p className="text-xs text-slate-600 mt-0.5">
+          Real-time punch logging, shift attendance audit, and Indian Standard Time (IST) tracking
         </p>
       </div>
 
       {/* Clock Widget & Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Live Punch Console */}
-        <div className="bg-gradient-to-br from-indigo-900 to-slate-900 border border-indigo-800/50 rounded-2xl p-6 text-white shadow-lg flex flex-col justify-between">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-300">
-                Nexus Time Terminal
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                WorkNest Time Terminal
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Live Sync
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                IST Active
               </span>
             </div>
 
             {/* Large Digital Clock */}
-            <div className="text-3xl sm:text-4xl font-mono font-black tracking-tight text-white mb-2">
-              {currentTime || '09:00:00 AM'}
+            <div className="text-3xl font-mono font-black tracking-tight text-slate-900 mb-1 tabular-nums">
+              {currentTime || '09:15:00 AM'}
             </div>
-            <p className="text-xs text-indigo-200/80 mb-6">
-              {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            <p className="text-xs text-slate-500 mb-5 font-medium">
+              {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
 
-            {/* Employee Selector */}
-            <div className="space-y-1.5 mb-6">
-              <label className="text-[11px] font-semibold text-indigo-200">Select Employee</label>
-              <select
-                value={selectedEmpId}
-                onChange={(e) => setSelectedEmpId(Number(e.target.value))}
-                className="w-full bg-slate-800/90 border border-indigo-700/60 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                {employees.map((e) => (
-                  <option key={e.id} value={e.id} className="bg-slate-900">
-                    {e.first_name} {e.last_name} ({e.employee_id} - {e.department})
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* Personnel Selector or Locked View */}
+            {isEmployee ? (
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 mb-5">
+                <span className="text-[10px] uppercase font-bold text-slate-500 block mb-0.5">
+                  Punching As:
+                </span>
+                <span className="text-xs font-bold text-slate-900">
+                  {currentUser?.full_name} ({employees.find(e => e.id === currentUser?.employee_id)?.employee_id || 'WN-IND-1003'})
+                </span>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Pune Technology Center &bull; Engineering
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-1.5 mb-5">
+                <label className="text-xs font-bold text-slate-700">Select Personnel</label>
+                <select
+                  value={selectedEmpId}
+                  onChange={(e) => setSelectedEmpId(Number(e.target.value))}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+                >
+                  {employees.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.first_name} {e.last_name} ({e.employee_id} - {e.department})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
-          {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Punch Actions */}
+          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
             <button
-              disabled={punching}
               onClick={() => handlePunchAction('clock_in')}
-              className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-emerald-500/20"
+              disabled={punching}
+              className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs transition-colors"
             >
-              <LogIn className="w-4 h-4" />
-              <span>Clock In</span>
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Clock IN</span>
             </button>
             <button
-              disabled={punching}
               onClick={() => handlePunchAction('clock_out')}
-              className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white py-2.5 rounded-xl text-xs font-bold transition-all shadow-md shadow-amber-500/20"
+              disabled={punching}
+              className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-300 disabled:opacity-50 text-slate-800 font-bold py-2.5 px-3 rounded-xl text-xs transition-colors"
             >
-              <LogOut className="w-4 h-4" />
-              <span>Clock Out</span>
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Clock OUT</span>
             </button>
           </div>
         </div>
 
-        {/* Attendance Summary Stats */}
+        {/* Presence Summary Metrics */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Present</span>
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-                <CheckCircle className="w-4 h-4" />
-              </div>
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <span>On Duty (Full Day)</span>
+              <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-bold">Present</span>
             </div>
             <div className="mt-4">
-              <span className="text-2xl font-black text-slate-900 dark:text-white">{presentCount}</span>
-              <p className="text-[11px] text-emerald-600 font-semibold mt-0.5">On-time shifts logged</p>
+              <span className="text-3xl font-black text-slate-900 tabular-nums">{presentCount}</span>
+              <p className="text-xs text-slate-500 mt-1 font-medium">Logged 8+ standard hours</p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Half Day</span>
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
-                <Clock className="w-4 h-4" />
-              </div>
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <span>Half Day Shifts</span>
+              <span className="text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[10px] font-bold">4 Hours</span>
             </div>
             <div className="mt-4">
-              <span className="text-2xl font-black text-slate-900 dark:text-white">{halfDayCount}</span>
-              <p className="text-[11px] text-amber-600 font-semibold mt-0.5">Partial shift recorded</p>
+              <span className="text-3xl font-black text-slate-900 tabular-nums">{halfDayCount}</span>
+              <p className="text-xs text-slate-500 mt-1 font-medium">First or second half shift</p>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Absent / Leave</span>
-              <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-600 flex items-center justify-center">
-                <AlertCircle className="w-4 h-4" />
-              </div>
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <span>Absent / On Leave</span>
+              <span className="text-rose-700 bg-rose-50 px-2 py-0.5 rounded text-[10px] font-bold">Time Off</span>
             </div>
             <div className="mt-4">
-              <span className="text-2xl font-black text-slate-900 dark:text-white">{absentCount}</span>
-              <p className="text-[11px] text-red-500 font-semibold mt-0.5">Approved leave or absent</p>
+              <span className="text-3xl font-black text-slate-900 tabular-nums">{absentCount}</span>
+              <p className="text-xs text-slate-500 mt-1 font-medium">Sanctioned statutory leave</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Attendance Register Table */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs overflow-hidden">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Today's Attendance Register
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            Today&apos;s Daily Presence Register
           </h2>
-          <span className="text-xs text-slate-400">
-            {new Date().toISOString().split('T')[0]}
+          <span className="text-xs text-slate-500 font-medium">
+            {attendanceRecords.length} records logged today
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider">
-                <th className="py-3 px-4">Employee</th>
-                <th className="py-3 px-4">Punch In</th>
-                <th className="py-3 px-4">Punch Out</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
+                <th className="py-3 px-4">Personnel</th>
+                <th className="py-3 px-4">Punch In (IST)</th>
+                <th className="py-3 px-4">Punch Out (IST)</th>
                 <th className="py-3 px-4">Hours Logged</th>
-                <th className="py-3 px-4 text-right">Status</th>
+                <th className="py-3 px-4 text-center">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {attendanceRecords.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-8 text-slate-400">
-                    No attendance logs recorded for today yet.
+            <tbody className="divide-y divide-slate-100">
+              {attendanceRecords.map((r) => (
+                <tr key={r.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="py-3 px-4 font-bold text-slate-900">
+                    {r.employee_name}
+                  </td>
+                  <td className="py-3 px-4 text-slate-700 font-mono font-medium">
+                    {r.punch_in || '--:--'}
+                  </td>
+                  <td className="py-3 px-4 text-slate-700 font-mono font-medium">
+                    {r.punch_out || '--:--'}
+                  </td>
+                  <td className="py-3 px-4 text-slate-900 tabular-nums font-semibold">
+                    {r.work_hours > 0 ? `${r.work_hours.toFixed(1)} hrs` : '0.0 hrs'}
+                  </td>
+                  <td className="py-3 px-4 text-center">
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                      r.status === 'present'
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        : r.status === 'half_day'
+                        ? 'bg-amber-50 text-amber-800 border-amber-200'
+                        : 'bg-rose-50 text-rose-800 border-rose-200'
+                    }`}>
+                      {r.status === 'present' ? 'Present' : r.status === 'half_day' ? 'Half Day' : 'Absent'}
+                    </span>
                   </td>
                 </tr>
-              ) : (
-                attendanceRecords.map((rec) => {
-                  const statusColors = {
-                    present: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-                    half_day: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-                    absent: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
-                  }[rec.status] || 'bg-slate-100 text-slate-600';
-
-                  return (
-                    <tr key={rec.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                      <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">
-                        {rec.employee_name}
-                      </td>
-                      <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-300">
-                        {rec.punch_in || '—'}
-                      </td>
-                      <td className="py-3 px-4 font-mono text-slate-600 dark:text-slate-300">
-                        {rec.punch_out || 'Active on shift'}
-                      </td>
-                      <td className="py-3 px-4 font-semibold text-slate-800 dark:text-slate-200">
-                        {rec.work_hours.toFixed(1)} hrs
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold border capitalize ${statusColors}`}>
-                          {rec.status.replace('_', ' ')}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+              ))}
             </tbody>
           </table>
         </div>

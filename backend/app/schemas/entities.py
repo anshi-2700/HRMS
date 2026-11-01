@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 # Auth Schemas
 class LoginRequest(BaseModel):
@@ -14,6 +14,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+    role: Optional[str] = None
 
 class UserOut(BaseModel):
     id: int
@@ -22,6 +23,7 @@ class UserOut(BaseModel):
     full_name: str
     role: str
     is_active: bool
+    employee_id: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -30,11 +32,14 @@ class UserOut(BaseModel):
 class EmployeeBase(BaseModel):
     first_name: str
     last_name: str
-    email: EmailStr
+    email: str
     phone: Optional[str] = None
-    department: str = "Engineering"
-    designation: str = "Software Engineer"
-    salary: float = 75000.0
+    department: str = "Engineering & Tech"
+    designation: str = "Senior Software Engineer"
+    location: str = "Bengaluru (HQ)"
+    salary: float = 1450000.0
+    pan_number: Optional[str] = None
+    uan_number: Optional[str] = None
     status: str = "active"
 
 class EmployeeCreate(EmployeeBase):
@@ -50,7 +55,7 @@ class EmployeeOut(EmployeeBase):
 
 # Attendance Schemas
 class AttendancePunchRequest(BaseModel):
-    employee_id: int
+    employee_id: Optional[int] = None
     punch_type: str = "clock_in"  # clock_in or clock_out
 
 class AttendanceOut(BaseModel):
@@ -68,8 +73,8 @@ class AttendanceOut(BaseModel):
 
 # Leave Schemas
 class LeaveApplyRequest(BaseModel):
-    employee_id: int
-    leave_type: str = "Annual Leave"
+    employee_id: Optional[int] = None
+    leave_type: str = "Casual Leave"
     start_date: date
     end_date: date
     days: int = 1
@@ -86,6 +91,7 @@ class LeaveOut(BaseModel):
     reason: Optional[str] = None
     status: str
     applied_on: date
+    reviewed_by: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -98,8 +104,13 @@ class PayrollOut(BaseModel):
     month: str
     year: int
     basic_salary: float
-    allowances: float
-    deductions: float
+    hra: float = 0.0
+    special_allowance: float = 0.0
+    allowances: float = 0.0
+    pf_deduction: float = 0.0
+    pt_deduction: float = 200.0
+    tds_deduction: float = 0.0
+    deductions: float = 0.0
     net_salary: float
     status: str
     payment_date: date
@@ -107,31 +118,34 @@ class PayrollOut(BaseModel):
     class Config:
         from_attributes = True
 
-# Recruitment Schemas
-class CandidateOut(BaseModel):
-    id: int
-    job_id: int
-    full_name: str
-    email: str
-    phone: Optional[str] = None
-    stage: str
-    rating: float
-    applied_date: date
-
-    class Config:
-        from_attributes = True
-
+# Job & Recruitment Schemas
 class JobOut(BaseModel):
     id: int
     title: str
     department: str
     location: str
     job_type: str
+    experience_level: Optional[str] = "3-6 Years"
     description: Optional[str] = None
     vacancies: int
     status: str
     posted_date: date
-    candidates_count: Optional[int] = 0
+    candidates_count: int = 0
+
+    class Config:
+        from_attributes = True
+
+class CandidateOut(BaseModel):
+    id: int
+    job_id: int
+    full_name: str
+    email: str
+    phone: Optional[str] = None
+    current_company: Optional[str] = None
+    experience_years: float = 3.0
+    stage: str
+    rating: float
+    applied_date: date
 
     class Config:
         from_attributes = True
@@ -143,19 +157,12 @@ class AssetCreate(BaseModel):
     category: str = "Laptop"
     serial_number: Optional[str] = None
     assigned_to: Optional[str] = None
-    value: float = 1200.0
+    value: float = 85000.0
     status: str = "in_use"
 
-class AssetOut(BaseModel):
+class AssetOut(AssetCreate):
     id: int
-    asset_tag: str
-    name: str
-    category: str
-    serial_number: Optional[str] = None
-    assigned_to: Optional[str] = None
     purchase_date: date
-    value: float
-    status: str
 
     class Config:
         from_attributes = True
@@ -170,3 +177,9 @@ class DashboardStats(BaseModel):
     total_assets: int
     monthly_payroll: float
     departments_count: int
+    my_leave_balance: Optional[dict] = None
+    my_assigned_assets: Optional[int] = 0
+    dept_team_count: Optional[int] = None
+    dept_present_today: Optional[int] = None
+    dept_name: Optional[str] = None
+    view_role: Optional[str] = None

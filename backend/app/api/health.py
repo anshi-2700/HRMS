@@ -15,7 +15,7 @@ def health_check(db: Session = Depends(get_db)):
 
     return {
         "status": "ok",
-        "service": "Nexus Workforce OS (FastAPI)",
-        "version": "2.5.0",
+        "service": "WorkNest HRMS API (FastAPI)",
+        "version": "3.0.0",
         "database": db_status
     }

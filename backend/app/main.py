@@ -5,6 +5,7 @@ from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.database import engine, Base, SessionLocal
+from app.models import entities  # ensure all models register with Base.metadata
 from app.seed import seed_database
 
 from app.api.health import router as health_router

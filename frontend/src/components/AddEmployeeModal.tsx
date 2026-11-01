@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserPlus, X, Briefcase, Mail, Phone, DollarSign } from 'lucide-react';
+import { UserPlus, X } from 'lucide-react';
 import { Employee } from '../types';
 
 interface AddEmployeeModalProps {
@@ -16,10 +16,12 @@ export const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [department, setDepartment] = useState('Engineering');
-  const [designation, setDesignation] = useState('Software Engineer');
-  const [salary, setSalary] = useState('95000');
+  const [phone, setPhone] = useState('+91 ');
+  const [department, setDepartment] = useState('Engineering & Technology');
+  const [designation, setDesignation] = useState('Senior Software Engineer');
+  const [location, setLocation] = useState('Bengaluru (HQ)');
+  const [salary, setSalary] = useState('1800000');
+  const [panNumber, setPanNumber] = useState('');
   const [status, setStatus] = useState<'active' | 'on_leave' | 'inactive'>('active');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -44,40 +46,43 @@ export const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
         phone: phone || undefined,
         department,
         designation,
-        salary: parseFloat(salary) || 50000,
+        location,
+        salary: parseFloat(salary) || 1200000,
+        pan_number: panNumber || 'AABCS1234F',
         status,
       });
       onClose();
-      // Reset form
+      // Reset
       setFirstName('');
       setLastName('');
       setEmail('');
-      setPhone('');
+      setPhone('+91 ');
+      setPanNumber('');
     } catch (err: any) {
-      setError(err.message || 'Failed to enroll employee.');
+      setError(err.message || 'Failed to enroll personnel.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 text-white">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <UserPlus size={18} className="text-indigo-400" />
-            Enroll New Personnel
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-2xl max-w-lg w-full p-6 text-slate-900 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <UserPlus size={18} className="text-blue-600" />
+            Enroll New Organization Personnel
           </h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white text-lg font-bold p-1 rounded-lg hover:bg-slate-800"
+            className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100"
           >
             <X size={18} />
           </button>
         </div>
 
         {error && (
-          <div className="mt-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs">
+          <div className="mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold">
             {error}
           </div>
         )}
@@ -85,122 +90,134 @@ export const AddEmployeeModal: React.FC<AddEmployeeModalProps> = ({
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">First Name</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">First Name</label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Vikram"
+                placeholder="e.g. Rohan"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Last Name</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Last Name</label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Mehta"
+                placeholder="e.g. Kulkarni"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Corporate Email</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Corporate Email</label>
               <input
                 type="email"
                 required
-                placeholder="e.g. v.mehta@nexus.corp"
+                placeholder="rohan.k@worknest.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Phone Number</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Contact Phone</label>
               <input
-                type="tel"
-                placeholder="+91 98765 43210"
+                type="text"
+                placeholder="+91 98203 45678"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Department</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Department</label>
               <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               >
-                <option value="Engineering">Engineering</option>
-                <option value="Product">Product</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Human Resources">Human Resources</option>
-                <option value="Finance">Finance</option>
+                <option value="Engineering & Technology">Engineering &amp; Technology</option>
+                <option value="Product Design & UI/UX">Product Design &amp; UI/UX</option>
+                <option value="People Operations (HR)">People Operations (HR)</option>
+                <option value="Finance & Accounts">Finance &amp; Accounts</option>
+                <option value="Enterprise Client Partnerships">Enterprise Client Partnerships</option>
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Designation</label>
-              <input
-                type="text"
-                required
-                placeholder="e.g. Staff Security Architect"
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
-              />
+              <label className="block text-xs font-bold text-slate-700 mb-1">Work Location</label>
+              <select
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+              >
+                <option value="Bengaluru (HQ)">Bengaluru (HQ)</option>
+                <option value="Pune Technology Center">Pune Technology Center</option>
+                <option value="Hyderabad Hub">Hyderabad Hub</option>
+                <option value="Mumbai Corporate Office">Mumbai Corporate Office</option>
+                <option value="Gurugram Office">Gurugram Office</option>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Monthly Salary (₹)</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Designation</label>
               <input
-                type="number"
-                step="1000"
+                type="text"
                 required
-                value={salary}
-                onChange={(e) => setSalary(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                placeholder="e.g. Cloud Architect"
+                value={designation}
+                onChange={(e) => setDesignation(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Employment Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as any)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
-              >
-                <option value="active">Active Duty</option>
-                <option value="on_leave">On Leave</option>
-                <option value="inactive">Inactive</option>
-              </select>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Annual CTC (INR)</label>
+              <input
+                type="number"
+                required
+                placeholder="1800000"
+                value={salary}
+                onChange={(e) => setSalary(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white"
+              />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1">PAN Card Number (Statutory)</label>
+            <input
+              type="text"
+              placeholder="e.g. ABCDE1234F"
+              value={panNumber}
+              onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 uppercase focus:outline-none focus:border-blue-600 focus:bg-white"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-slate-100 flex justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              id="btn-confirm-add-employee"
-              className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 text-white text-xs font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
             >
-              {loading ? 'Creating...' : 'Enroll Employee'}
+              {loading ? 'Enrolling...' : 'Enroll Personnel'}
             </button>
           </div>
         </form>

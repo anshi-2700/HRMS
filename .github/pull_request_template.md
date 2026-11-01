@@ -8,31 +8,25 @@
 - [ ] New feature
 - [ ] Refactor / cleanup
 - [ ] Documentation
-- [ ] Tests only
 
 ## Module
 
-- [ ] Authentication (`apps/user`)
-- [ ] Attendance / Leave (`apps/employee`)
-- [ ] Payroll (`apps/payroll`)
+- [ ] Authentication & RBAC (`backend/app/api/auth.py`)
+- [ ] Attendance & Biometrics (`backend/app/api/attendance.py`)
+- [ ] Leave Management (`backend/app/api/leaves.py`)
+- [ ] Indian Payroll & Tax (`backend/app/api/payroll.py`)
+- [ ] Frontend Portal / Dashboards (`frontend/src/`)
 - [ ] Other: ___
 
 ## Checklist (Definition of Done)
 
-- [ ] CI passes (`pytest`, `flake8`, `black --check`)
-- [ ] New logic has `pytest-django` tests
-- [ ] Migrations included if models changed (and reviewed)
-- [ ] Documentation updated for new APIs or setup steps
-- [ ] Tested locally (`docker compose up` or manual run)
+- [ ] Type checks pass (`npm run build`)
+- [ ] Role-based access control (Admin, Manager, Employee) validated
+- [ ] Indian compliance standards verified (PAN, UAN, EPF, PT, INR format)
+- [ ] Verified locally (`docker compose up` or `./start-local.bat`)
 
-## How to test
+## Verification Steps
 
 ```bash
-# Steps for reviewer
 docker compose up --build
-# ...
 ```
-
-## Screenshots (if UI change)
-
-<!-- Optional -->

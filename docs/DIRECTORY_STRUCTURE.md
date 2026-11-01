@@ -1,9 +1,9 @@
-# Nexus Workforce OS — Directory Structure
+# WorkNest HRMS — Directory Structure
 
-This document details the layout and architecture of the Nexus Workforce OS repository.
+This document details the layout and architecture of the WorkNest HRMS repository.
 
 ```
-nexus-workforce-os/
+worknest-hrms/
 ├── backend/                       # Python & FastAPI REST API service
 │   ├── app/                       # Core application package
 │   │   ├── api/                   # Typed REST API endpoints
@@ -11,28 +11,33 @@ nexus-workforce-os/
 │   │   │   ├── attendance.py      # Attendance clock-in/out & punch logs
 │   │   │   ├── auth.py            # Authentication, JWT sessions & login
 │   │   │   ├── dashboard.py       # Aggregated KPIs and live statistics
-│   │   │   ├── employees.py       # Staff directory & department filtering
+│   │   │   ├── employees.py       # Staff directory & Indian tax tags
 │   │   │   ├── health.py          # Liveness & database status probes
 │   │   │   ├── leaves.py          # Leave applications & approval workflows
-│   │   │   ├── payroll.py         # Remuneration ledger & payslip records
+│   │   │   ├── payroll.py         # Indian remuneration ledger & payslips (₹)
 │   │   │   └── recruitment.py     # Job requisitions & candidate pipeline
 │   │   ├── core/                  # Database engine, JWT, config & security
 │   │   ├── models/                # SQLAlchemy relational entity models
 │   │   ├── schemas/               # Pydantic v2 schemas and request contracts
 │   │   ├── main.py                # FastAPI ASGI application & middleware
-│   │   └── seed.py                # Database seeder with realistic test data
+│   │   └── seed.py                # Database seeder with Indian corporate roster
 │   ├── Dockerfile                 # Container build definition (Uvicorn ASGI)
 │   └── requirements.txt           # Python dependencies
 │
 ├── frontend/                      # React 19 + TypeScript + Tailwind CSS v4 SPA
 │   ├── src/
 │   │   ├── components/            # High-fidelity TSX Views & Modals
+│   │   │   ├── dashboards/        # Role-Dedicated Command Centers (RBAC)
+│   │   │   │   ├── AdminDashboard.tsx      # Super Admin executive control
+│   │   │   │   ├── ManagerDashboard.tsx    # Department team & approvals
+│   │   │   │   └── EmployeeDashboard.tsx   # Personal punch, leaves & salary slip
 │   │   │   ├── AddEmployeeModal.tsx
 │   │   │   ├── ApplyLeaveModal.tsx
 │   │   │   ├── AssetsView.tsx
 │   │   │   ├── AttendanceView.tsx
-│   │   │   ├── DashboardView.tsx
+│   │   │   ├── DashboardView.tsx   # Dynamic role dispatcher
 │   │   │   ├── EmployeesView.tsx
+│   │   │   ├── HomePage.tsx        # Dedicated full-width public corporate portal
 │   │   │   ├── LeavesView.tsx
 │   │   │   ├── LoginModal.tsx
 │   │   │   ├── PayrollView.tsx
@@ -49,10 +54,5 @@ nexus-workforce-os/
 │   ├── tsconfig.json              # Strict TypeScript compiler options
 │   └── vite.config.ts             # Tailwind CSS v4 Vite plugin & /api proxy
 │
-├── docker-compose.yml             # Orchestration for Backend, Frontend, Postgres
-├── start-all.bat                  # 1-Click launcher using Docker Compose
-├── start-local.bat                # 1-Click launcher for local dev
-├── start-backend.bat              # Backend standalone launcher (FastAPI)
-├── start-frontend.bat             # Frontend standalone launcher (React + TS)
-└── stop-all.bat                   # Stop running containers
+└── docker-compose.yml             # Orchestration for Backend, Frontend, Postgres
 ```

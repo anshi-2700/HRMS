@@ -4,52 +4,109 @@ import {
   Users, 
   Clock, 
   CalendarDays, 
-  CreditCard, 
+  ReceiptIndianRupee, 
   Briefcase, 
   Laptop, 
-  ShieldCheck,
-  ChevronRight
+  Building2,
+  ChevronRight,
+  Shield,
+  UserCheck
 } from 'lucide-react';
-import { TabType } from '../types';
+import { TabType, User } from '../types';
 
 interface SidebarProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  currentUser: User | null;
   pendingLeavesCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   activeTab, 
   setActiveTab,
+  currentUser,
   pendingLeavesCount = 0 
 }) => {
+  const isEmployee = currentUser?.role === 'employee';
+  const isManager = currentUser?.role === 'manager' || currentUser?.role === 'client';
+  const isAdmin = currentUser?.role === 'admin';
+  const isGuest = !currentUser;
+
+  const getDashboardLabel = () => {
+    if (isGuest) return 'Company Gateway';
+    if (isAdmin) return 'Executive Command';
+    if (isManager) return 'Team Operations';
+    return 'My Workspace';
+  };
+
+  const getSectionHeader = () => {
+    if (isGuest) return 'Public Gateway';
+    if (isAdmin) return 'Super Admin Console';
+    if (isManager) return 'Department Operations';
+    return 'Self-Service Portal';
+  };
+
   const navItems = [
-    { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
-    { id: 'employees', label: 'Employee Directory', icon: Users },
-    { id: 'attendance', label: 'Attendance & Clock', icon: Clock },
-    { id: 'leaves', label: 'Leave Governance', icon: CalendarDays, badge: pendingLeavesCount > 0 ? pendingLeavesCount : undefined },
-    { id: 'payroll', label: 'Compensation & Payroll', icon: CreditCard },
-    { id: 'recruitment', label: 'Recruitment & ATS', icon: Briefcase },
-    { id: 'assets', label: 'Asset Management', icon: Laptop },
+    { 
+      id: 'dashboard', 
+      label: getDashboardLabel(), 
+      icon: LayoutDashboard 
+    },
+    { 
+      id: 'employees', 
+      label: isGuest ? 'Personnel Roster' : 'Personnel Directory', 
+      icon: Users 
+    },
+    { 
+      id: 'attendance', 
+      label: isEmployee ? 'My Attendance & Clock' : 'Attendance & Shifts', 
+      icon: Clock 
+    },
+    { 
+      id: 'leaves', 
+      label: isEmployee ? 'My Leaves & Holidays' : 'Leave Governance', 
+      icon: CalendarDays, 
+      badge: (!isEmployee && !isGuest && pendingLeavesCount > 0) ? pendingLeavesCount : undefined 
+    },
+    { 
+      id: 'payroll', 
+      label: isEmployee ? 'My Payslips & Tax' : (isGuest ? 'Remuneration Standard' : 'Payroll & CTC Ledger'), 
+      icon: ReceiptIndianRupee 
+    },
+    { 
+      id: 'recruitment', 
+      label: isGuest ? 'Open Tech Roles' : (isEmployee ? 'Internal Job Openings' : 'Recruitment & ATS'), 
+      icon: Briefcase 
+    },
+    { 
+      id: 'assets', 
+      label: isEmployee ? 'My Allocated Assets' : 'IT Assets Register', 
+      icon: Laptop 
+    },
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col shrink-0 select-none min-h-screen">
+    <aside className="w-64 bg-white border-r border-slate-200 text-slate-700 flex flex-col shrink-0 select-none min-h-screen shadow-sm">
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-500/25">
-          N
+      <div className="h-16 flex items-center px-5 border-b border-slate-200 gap-3 bg-white">
+        <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
+          W
         </div>
-        <div className="flex flex-col">
-          <span className="font-extrabold text-white tracking-wider text-sm">NEXUS</span>
-          <span className="text-[10px] text-indigo-400 font-semibold tracking-widest uppercase">Workforce OS</span>
+        <div className="flex flex-col min-w-0">
+          <span className="font-extrabold text-slate-900 tracking-tight text-sm truncate">WorkNest</span>
+          <span className="text-[10px] text-blue-600 font-bold tracking-wide">Workforce &amp; Payroll OS</span>
         </div>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
-        <div className="px-3 pb-2 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-          Enterprise Modules
+      <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+        <div className="px-3 pb-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+          <span>{getSectionHeader()}</span>
+          {currentUser && (
+            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 uppercase">
+              {currentUser.role}
+            </span>
+          )}
         </div>
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -58,37 +115,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id as TabType)}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 group ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'bg-blue-600 text-white font-bold shadow-sm'
+                  : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50'
               }`}
             >
-              <div className="flex items-center gap-3">
-                <Icon className={`w-4 h-4 transition-transform duration-150 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`} />
+              <div className="flex items-center gap-2.5">
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
                 <span>{item.label}</span>
               </div>
               
               {item.badge !== undefined ? (
-                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">
                   {item.badge}
                 </span>
               ) : isActive ? (
-                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                <ChevronRight className="w-3.5 h-3.5 opacity-80" />
               ) : null}
             </button>
           );
         })}
       </nav>
 
-      {/* Security & System Info Footer */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/40">
-        <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>SOC-2 Certified Platform</span>
+      {/* Corporate Info Footer */}
+      <div className="p-4 border-t border-slate-200 bg-slate-50">
+        <div className="flex items-center gap-2 text-xs text-slate-900 font-bold">
+          <Building2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <span className="truncate">WorkNest Technologies</span>
         </div>
-        <p className="text-[11px] text-slate-500 font-mono">
-          FastAPI &bull; React &bull; Tailwind v4
+        <p className="text-[11px] text-slate-500 mt-1">
+          Bengaluru &bull; Pune &bull; Hyderabad
         </p>
       </div>
     </aside>

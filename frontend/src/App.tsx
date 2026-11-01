@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { api } from './api';
 import { Sidebar } from './components/Sidebar';
 import { Topbar } from './components/Topbar';
+import { HomePage } from './components/HomePage';
 import { DashboardView } from './components/DashboardView';
 import { EmployeesView } from './components/EmployeesView';
 import { AttendanceView } from './components/AttendanceView';
@@ -24,7 +25,7 @@ import {
   AssetItem,
   TabType,
 } from './types';
-import { CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { CheckCircle2, AlertCircle, X, Loader2 } from 'lucide-react';
 
 interface Toast {
   id: number;
@@ -38,7 +39,7 @@ export const App: React.FC = () => {
   const [apiHealthy, setApiHealthy] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Core Data
+  // Core Organization Data
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [attendance, setAttendance] = useState<AttendanceRecord[]>([]);
@@ -53,7 +54,7 @@ export const App: React.FC = () => {
   const [showApplyLeaveModal, setShowApplyLeaveModal] = useState<boolean>(false);
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
-  // Toasts
+  // Toast Notifications
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const addToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -104,6 +105,7 @@ export const App: React.FC = () => {
     }
   }, []);
 
+  // Initial data loading
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -119,7 +121,20 @@ export const App: React.FC = () => {
   const handleLogout = () => {
     api.logout();
     setUser(null);
-    addToast('Signed out of session', 'info');
+    setCurrentTab('dashboard');
+    addToast('Signed out successfully. Welcome to WorkNest homepage.', 'info');
+    loadData();
+  };
+
+  const handleSwitchPersona = async (role: 'admin' | 'manager' | 'employee') => {
+    try {
+      const newUser = await api.switchPersona(role);
+      setUser(newUser);
+      addToast(`Switched persona to ${newUser.full_name} (${newUser.role})`, 'success');
+      loadData();
+    } catch (err: any) {
+      addToast(err.message || 'Failed to switch persona', 'error');
+    }
   };
 
   // Business Action Handlers
@@ -132,14 +147,14 @@ export const App: React.FC = () => {
       const updatedStats = await api.getStats();
       setStats(updatedStats);
     } catch (err: any) {
-      addToast(err.message || 'Failed to record attendance', 'error');
+      addToast(err.message || 'Failed to record attendance punch', 'error');
     }
   };
 
   const handleApproveLeave = async (id: number) => {
     try {
-      await api.approveLeave(id);
-      addToast('Leave request approved', 'success');
+      const res = await api.approveLeave(id);
+      addToast(res.message || 'Leave request approved', 'success');
       const updatedLeaves = await api.getLeaves();
       setLeaves(updatedLeaves);
       const updatedStats = await api.getStats();
@@ -151,8 +166,8 @@ export const App: React.FC = () => {
 
   const handleRejectLeave = async (id: number) => {
     try {
-      await api.rejectLeave(id);
-      addToast('Leave request declined', 'info');
+      const res = await api.rejectLeave(id);
+      addToast(res.message || 'Leave request declined', 'info');
       const updatedLeaves = await api.getLeaves();
       setLeaves(updatedLeaves);
       const updatedStats = await api.getStats();
@@ -172,7 +187,7 @@ export const App: React.FC = () => {
   };
 
   const handleApplyLeave = async (leaveData: {
-    employee_id: number;
+    employee_id?: number;
     leave_type: string;
     start_date: string;
     end_date: string;
@@ -189,37 +204,92 @@ export const App: React.FC = () => {
 
   const handleCreateAsset = async (assetData: Omit<AssetItem, 'id' | 'purchase_date'>) => {
     const created = await api.createAsset(assetData);
-    addToast(`Asset ${created.asset_tag} (${created.name}) registered`, 'success');
+    addToast(`Registered asset ${created.asset_tag} (${created.name})`, 'success');
     const updated = await api.getAssets();
     setAssets(updated);
   };
 
+  const canManage = user?.role === 'admin' || user?.role === 'manager';
+
+  // ================= 1. DEDICATED SIGNED-OUT HOMEPAGE =================
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
+        {/* Toast Notification Container */}
+        <div className="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+          {toasts.map((t) => (
+            <div
+              key={t.id}
+              className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-lg border text-xs font-semibold backdrop-blur-md ${
+                t.type === 'success'
+                  ? 'bg-white border-emerald-300 text-slate-900'
+                  : t.type === 'error'
+                  ? 'bg-white border-rose-300 text-slate-900'
+                  : 'bg-white border-blue-300 text-slate-900'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {t.type === 'success' ? (
+                  <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                ) : (
+                  <AlertCircle size={16} className="text-rose-600 shrink-0" />
+                )}
+                <span>{t.message}</span>
+              </div>
+              <button
+                onClick={() => setToasts((prev) => prev.filter((item) => item.id !== t.id))}
+                className="text-slate-400 hover:text-slate-600 ml-2"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Dedicated Full-Page Homepage */}
+        <HomePage
+          jobs={jobs}
+          onOpenLogin={() => setShowLoginModal(true)}
+          onQuickLogin={handleSwitchPersona}
+        />
+
+        {/* Sign In Modal */}
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          onLogin={handleLogin}
+        />
+      </div>
+    );
+  }
+
+  // ================= 2. AUTHENTICATED ROLE WORKSPACE =================
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="flex h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans">
       {/* Toast Notification Container */}
       <div className="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-2xl border text-xs font-medium animate-fadeIn backdrop-blur-md ${
+            className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-xl shadow-lg border text-xs font-semibold backdrop-blur-md ${
               t.type === 'success'
-                ? 'bg-slate-900/95 border-emerald-500/30 text-emerald-300'
+                ? 'bg-white border-emerald-300 text-slate-900'
                 : t.type === 'error'
-                ? 'bg-slate-900/95 border-rose-500/30 text-rose-300'
-                : 'bg-slate-900/95 border-indigo-500/30 text-indigo-300'
+                ? 'bg-white border-rose-300 text-slate-900'
+                : 'bg-white border-blue-300 text-slate-900'
             }`}
           >
             <div className="flex items-center gap-2">
               {t.type === 'success' ? (
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
               ) : (
-                <AlertCircle size={16} className="text-rose-400 shrink-0" />
+                <AlertCircle size={16} className="text-rose-600 shrink-0" />
               )}
               <span>{t.message}</span>
             </div>
             <button
               onClick={() => setToasts((prev) => prev.filter((item) => item.id !== t.id))}
-              className="text-slate-400 hover:text-white ml-2"
+              className="text-slate-400 hover:text-slate-600 ml-2"
             >
               <X size={14} />
             </button>
@@ -231,39 +301,55 @@ export const App: React.FC = () => {
       <Sidebar
         activeTab={currentTab}
         setActiveTab={setCurrentTab}
+        currentUser={user}
         pendingLeavesCount={leaves.filter((l) => l.status === 'pending').length}
       />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* Main Workspace Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
         {/* Top Header Bar */}
         <Topbar
           currentUser={user}
           apiHealthy={apiHealthy}
           onOpenLogin={() => setShowLoginModal(true)}
           onLogout={handleLogout}
+          onSwitchPersona={handleSwitchPersona}
         />
 
-        {/* Scrollable Workspace */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-slate-950/60 custom-scrollbar">
+        {/* Scrollable Main Viewport */}
+        <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-slate-50">
           {isLoading ? (
-            <div className="h-full flex flex-col items-center justify-center text-slate-400 gap-3">
-              <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-xs font-medium tracking-wide uppercase">Connecting to Nexus Workforce OS...</p>
+            <div className="h-full flex flex-col items-center justify-center text-slate-600 gap-3">
+              <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+              <p className="text-xs font-bold tracking-wider uppercase text-slate-500">
+                Initializing WorkNest HRMS &bull; FastAPI Backend...
+              </p>
             </div>
           ) : (
             <>
               {currentTab === 'dashboard' && (
                 <DashboardView
                   stats={stats}
+                  currentUser={user}
+                  employees={employees}
+                  pendingLeaves={leaves.filter((l) => l.status === 'pending')}
+                  candidates={candidates}
+                  jobs={jobs}
                   onNavigate={setCurrentTab}
                   onQuickPunch={() => setCurrentTab('attendance')}
+                  onOpenApplyLeave={() => setShowApplyLeaveModal(true)}
+                  onOpenAddEmployee={() => setShowAddEmpModal(true)}
+                  onOpenLogin={() => setShowLoginModal(true)}
+                  onQuickLogin={handleSwitchPersona}
+                  onApproveLeave={handleApproveLeave}
+                  onRejectLeave={handleRejectLeave}
                 />
               )}
 
               {currentTab === 'employees' && (
                 <EmployeesView
                   employees={employees}
+                  canManage={canManage}
                   onOpenAddModal={() => setShowAddEmpModal(true)}
                 />
               )}
@@ -272,6 +358,7 @@ export const App: React.FC = () => {
                 <AttendanceView
                   attendanceRecords={attendance}
                   employees={employees}
+                  currentUser={user}
                   onPunch={handlePunch}
                 />
               )}
@@ -279,6 +366,7 @@ export const App: React.FC = () => {
               {currentTab === 'leaves' && (
                 <LeavesView
                   leaves={leaves}
+                  currentUser={user}
                   onOpenApplyModal={() => setShowApplyLeaveModal(true)}
                   onApprove={handleApproveLeave}
                   onReject={handleRejectLeave}
@@ -289,6 +377,7 @@ export const App: React.FC = () => {
                 <PayrollView
                   salaries={payroll}
                   employees={employees}
+                  currentUser={user}
                   onRefresh={loadData}
                 />
               )}
@@ -304,7 +393,7 @@ export const App: React.FC = () => {
               {currentTab === 'assets' && (
                 <AssetsView
                   assets={assets}
-                  onCreateAsset={handleCreateAsset}
+                  onCreateAsset={canManage ? handleCreateAsset : undefined}
                 />
               )}
             </>
@@ -323,6 +412,7 @@ export const App: React.FC = () => {
         isOpen={showApplyLeaveModal}
         onClose={() => setShowApplyLeaveModal(false)}
         employees={employees}
+        currentUser={user}
         onApplyLeave={handleApplyLeave}
       />
 

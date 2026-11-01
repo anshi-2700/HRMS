@@ -19,6 +19,7 @@ def list_jobs(db: Session = Depends(get_db)):
             "department": j.department,
             "location": j.location,
             "job_type": j.job_type,
+            "experience_level": j.experience_level,
             "description": j.description,
             "vacancies": j.vacancies,
             "status": j.status,

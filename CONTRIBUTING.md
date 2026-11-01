@@ -1,41 +1,30 @@
-# Nexus Workforce OS — Engineering & Contribution Standards
+# WorkNest HRMS — Engineering Standards
 
-This document outlines the coding standards, branch conventions, and testing guidelines for engineering teams contributing to **Nexus Workforce OS**.
+This document outlines the coding standards and guidelines for engineering teams contributing to **WorkNest HRMS**.
 
 ---
 
 ## 🏗️ Architecture Principles
 
-1. **Decoupled Architecture**: All business logic resides in `backend/` and exposes clean REST endpoints via Django Ninja. The presentation layer lives strictly in `frontend/` as a React SPA.
-2. **Type Safety & OpenAPI Validation**: All API inputs and outputs must define explicit Pydantic schemas in `backend/config/api.py`.
-3. **Responsive & Accessible UI**: All frontend components must support both dark and light modes using the established CSS token design system in `frontend/src/index.css`.
-4. **Resilience & Testing**: Critical paths (payroll calculations, attendance records, leave approvals) must have unit test coverage.
+1. **Decoupled Architecture**: All business logic resides in `backend/` and exposes clean REST endpoints via **FastAPI**. The presentation layer lives strictly in `frontend/` as a **React 19 + TypeScript + Tailwind CSS v4** Single Page Application.
+2. **Type Safety & OpenAPI Validation**: All API inputs and outputs must define explicit Pydantic v2 schemas in `backend/app/schemas/entities.py`.
+3. **Role-Based Access Control (RBAC)**: All sensitive routes must enforce JWT authentication (`require_current_user`) and role-based permissions (`require_roles`).
+4. **Indian Statutory Compliance**: Payroll logic must strictly account for Basic, HRA, Special Allowance, Employee Provident Fund (EPF), Professional Tax (PT ₹200), and TDS withholding.
+5. **Resilience & Reliability**: Critical business operations (payroll calculations, biometric attendance punches, leave authorizations) must have verified error handling and database rollback protection.
 
 ---
 
-## 🛠️ Development Workflow
+## 🛠️ Verification & Quality Checks
 
-### 1. Branch Strategy
-- `main`: Production-ready releases.
-- `develop`: Integration branch for sprint features.
-- Feature branches: `feature/<module-name>` (e.g., `feature/attendance-biometrics`).
-- Bugfix branches: `fix/<issue-name>` (e.g., `fix/payroll-calculation`).
-
-### 2. Code Quality & Formatting
 ```bash
-# Backend linting and formatting
+# Backend verification
 cd backend
-flake8
-black --check .
+python -c "from app.main import app; print('WorkNest FastAPI Loaded')"
 
-# Run test suite
-pytest
-```
-
-```bash
-# Frontend build verification
+# Frontend build & typecheck
 cd frontend
 npm run build
+npx tsc -p tsconfig.json --noEmit
 ```
 
 ---
@@ -43,7 +32,6 @@ npm run build
 ## 📋 Definition of Done
 
 A task is considered complete when:
-- [ ] Backend endpoints include typed schemas and display in Swagger `/api/docs`.
-- [ ] Frontend UI integrates cleanly with error handling and toast notifications.
-- [ ] New database changes include clean Django migration files.
+- [ ] Backend endpoints include typed Pydantic contracts and render cleanly in Swagger at `/api/docs`.
+- [ ] Frontend UI integrates responsive error handling, toasts, and role-appropriate displays.
 - [ ] Code builds without errors in both local and Docker container environments.

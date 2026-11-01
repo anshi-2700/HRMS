@@ -1,3 +1,3 @@
 """
-Nexus Workforce OS - FastAPI Application Package
+WorkNest HRMS - High-Performance Python & FastAPI Backend
 """
